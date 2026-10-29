@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using HocoKeepAlive.Diagnostics;
 using NAudio.CoreAudioApi;
+using NAudio.CoreAudioApi.Interfaces;
 using NAudio.Wave;
 
 namespace HocoKeepAlive.Audio;

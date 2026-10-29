@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import {
   Home,
   Sliders,
-  Grid,
   Headphones,
   Settings,
   Zap,
@@ -25,7 +24,7 @@ interface AudioEndpoint {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'controls' | 'applications' | 'devices' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'controls' | 'devices' | 'settings'>('dashboard');
   const [isRunning, setIsRunning] = useState<boolean>(true);
   const [batteryLevel, setBatteryLevel] = useState<number>(85);
   const [isCharging, setIsCharging] = useState<boolean>(false);
@@ -271,18 +270,7 @@ export default function App() {
               <span>Smart Controls</span>
             </button>
 
-            {/* 3. Applications */}
-            <button
-              onClick={() => setActiveTab('applications')}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all cursor-pointer ${
-                activeTab === 'applications' ? 'bg-[#25121B] border border-[#481827] text-white' : 'text-[#8E95A5] hover:bg-[#181922] hover:text-white'
-              }`}
-            >
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[#7F869A]">
-                <Grid className="w-4 h-4" />
-              </div>
-              <span>Applications</span>
-            </button>
+
 
             {/* 4. Audio Devices */}
             <button
@@ -375,9 +363,9 @@ export default function App() {
         </header>
 
         {/* Dynamic Main Workspace Area */}
-        <main className="flex-1 overflow-y-auto p-8 w-full">
+        <main className="flex-1 overflow-y-auto p-6 lg:p-8 w-full no-scrollbar">
           {activeTab === 'dashboard' && (
-            <div className="space-y-6 max-w-6xl mx-auto w-full">
+            <div className="space-y-6 w-full max-w-full">
               {/* Header Title Section */}
               <div>
                 <h2 className="text-[34px] font-black tracking-tight text-white leading-tight">Dashboard</h2>
@@ -490,15 +478,16 @@ export default function App() {
                 </div>
               </div>
 
-              {/* 3. Lower Section: Active Applications (Matching screenshot) */}
+              {/* 3. Lower Section: Bluetooth Speaker Battery & Audio Hardware */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-[17px] font-bold text-white tracking-tight">Active Applications</h3>
-                    <p className="text-xs text-[#7F869A] mt-0.5">Manage individual app volumes and output devices</p>
+                    <h3 className="text-[17px] font-bold text-white tracking-tight">Bluetooth Speaker Battery & Audio Hardware</h3>
+                    <p className="text-xs text-[#7F869A] mt-0.5">Real-time battery telemetry, device routing, and mic call-handoff status</p>
                   </div>
-                  <span className="text-xs font-semibold text-[#8E95A5] bg-[#171820] border border-[#252733] px-3 py-1 rounded-full">
-                    7 running
+                  <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 border border-[#10B981]/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                    <Battery className="w-3.5 h-3.5" />
+                    <span>{batteryLevel}% Battery · HOCO HC22</span>
                   </span>
                 </div>
 
@@ -545,7 +534,7 @@ export default function App() {
 
           {/* Smart Controls Tab */}
           {activeTab === 'controls' && (
-            <div className="max-w-4xl mx-auto space-y-6">
+            <div className="w-full max-w-full space-y-6">
               <div>
                 <h2 className="text-2xl font-bold text-white">Smart Controls</h2>
                 <p className="text-xs text-[#7F869A] mt-1">Configure real-time keep-alive frequency and buffer options</p>
@@ -581,33 +570,9 @@ export default function App() {
             </div>
           )}
 
-          {/* Applications Tab */}
-          {activeTab === 'applications' && (
-            <div className="max-w-4xl mx-auto space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold text-white">Applications</h2>
-                <p className="text-xs text-[#7F869A] mt-1">Routing and volume controls for detected applications</p>
-              </div>
-
-              <div className="space-y-3">
-                {endpoints.map((ep) => (
-                  <div key={ep.id} className="bg-[#171820] border border-[#252733] rounded-xl p-4 flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-bold text-white">{ep.name}</p>
-                      <p className="text-xs text-[#7F869A]">{ep.category}</p>
-                    </div>
-                    <span className="text-xs font-mono font-bold text-[#FF4B72]">{ep.volume}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-
-
           {/* Audio Devices Tab */}
           {activeTab === 'devices' && (
-            <div className="max-w-4xl mx-auto space-y-6">
+            <div className="w-full max-w-full space-y-6">
               <div>
                 <h2 className="text-2xl font-bold text-white">Audio Devices</h2>
                 <p className="text-xs text-[#7F869A] mt-1">Select your target Bluetooth speaker or soundbox</p>
@@ -649,7 +614,7 @@ export default function App() {
 
           {/* Settings Tab */}
           {activeTab === 'settings' && (
-            <div className="max-w-4xl mx-auto space-y-6">
+            <div className="w-full max-w-full space-y-6">
               <div>
                 <h2 className="text-2xl font-bold text-white">Settings</h2>
                 <p className="text-xs text-[#7F869A] mt-1">System startup, minimization, and application preferences</p>
@@ -674,11 +639,11 @@ export default function App() {
 
                 <div className="pt-4 border-t border-[#252733] flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-bold text-white">HOCO KeepAlive Desktop Setup</p>
+                    <p className="text-sm font-bold text-white">Bluetooth KeepAlive Desktop Setup</p>
                     <p className="text-xs text-[#7F869A]">Version 1.0.4 • Windows 10 &amp; 11 x64</p>
                   </div>
                   <a
-                    href="https://github.com/tausif-rahaman-raiyan/HocoKeepAlive"
+                    href="https://github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive"
                     target="_blank"
                     rel="noreferrer"
                     className="px-4 py-2 rounded-xl bg-[#222430] text-xs font-semibold text-white hover:bg-[#2C2E3E] flex items-center gap-1.5"
@@ -691,6 +656,20 @@ export default function App() {
             </div>
           )}
         </main>
+
+        {/* Bottom Watermark Bar with GitHub Link */}
+        <footer className="h-8 px-6 bg-[#090A0E] border-t border-[#181924] flex items-center justify-between text-[11px] text-[#6F768A] flex-shrink-0">
+          <span>Bluetooth KeepAlive v1.0.4 • Developed by Tausif Rahaman Raiyan</span>
+          <a
+            href="https://github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive"
+            target="_blank"
+            rel="noreferrer"
+            className="text-[#C9D5FF] hover:text-white flex items-center gap-1 transition-colors"
+          >
+            <span>github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive</span>
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        </footer>
       </div>
     </div>
   );

@@ -48,15 +48,10 @@ public sealed class MainForm : Form
     private string _activePage = "Dashboard";
 
     // Dynamic Dashboard Controls
-    private Label? _lblStatStreams;
+    private Label? _lblStatBattery;
     private Label? _lblStatDevice;
-    private Label? _lblStatDuration;
-    private Label? _lblStatContinuity;
     private Label? _lblWaveContext;
     private Button? _btnOverviewToggle;
-    private Label? _lblOverviewDuration;
-    private Label? _lblOverviewDeviceName;
-    private Label? _lblOverviewDeviceBadge;
 
     public MainForm(AudioKeepAliveService audioService, AppSettings settings, Icon appIcon, Action onExit)
     {
@@ -149,9 +144,8 @@ public sealed class MainForm : Form
 
         AddNavButton(pnlNav, "Dashboard", "Dashboard", 0, dpiScale);
         AddNavButton(pnlNav, "Smart Controls", "Smart Controls", 1, dpiScale);
-        AddNavButton(pnlNav, "Applications", "Applications", 2, dpiScale);
-        AddNavButton(pnlNav, "Audio Devices", "Audio Devices", 3, dpiScale);
-        AddNavButton(pnlNav, "Settings", "Settings", 4, dpiScale);
+        AddNavButton(pnlNav, "Audio Devices", "Audio Devices", 2, dpiScale);
+        AddNavButton(pnlNav, "Settings", "Settings", 3, dpiScale);
 
         // Sidebar Footer User / Developer Card (Tausif Rahaman Raiyan)
         var pnlSidebarFooter = new Panel
@@ -306,7 +300,7 @@ public sealed class MainForm : Form
 
         var lblWatermarkText = new Label
         {
-            Text = "HOCO KeepAlive v1.0.4 • Developed by Tausif Rahaman Raiyan",
+            Text = "Bluetooth KeepAlive v1.0.4 • Developed by Tausif Rahaman Raiyan",
             ForeColor = TextMuted,
             Font = new Font("Segoe UI", 8F),
             Dock = DockStyle.Left,
@@ -316,7 +310,7 @@ public sealed class MainForm : Form
 
         var lnkWatermarkGithub = new LinkLabel
         {
-            Text = "github.com/tausif-rahaman-raiyan/HocoKeepAlive",
+            Text = "github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive",
             LinkColor = AccentLavender,
             ActiveLinkColor = Color.White,
             VisitedLinkColor = AccentLavender,
@@ -326,7 +320,7 @@ public sealed class MainForm : Form
             AutoSize = true,
             Cursor = Cursors.Hand
         };
-        lnkWatermarkGithub.LinkClicked += (_, _) => OpenUrl("https://github.com/tausif-rahaman-raiyan/HocoKeepAlive");
+        lnkWatermarkGithub.LinkClicked += (_, _) => OpenUrl("https://github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive");
 
         pnlWatermark.Controls.Add(lblWatermarkText);
         pnlWatermark.Controls.Add(lnkWatermarkGithub);
@@ -342,7 +336,8 @@ public sealed class MainForm : Form
         EnableDoubleBuffering(_contentContainer);
         EnableDoubleBuffering(_sidebarPanel);
 
-        // Responsive re-layout on resize
+        // Responsive instant re-layout on resize and maximize
+        _resizeDebounceTimer.Interval = 25;
         _resizeDebounceTimer.Tick += (_, _) =>
         {
             _resizeDebounceTimer.Stop();
@@ -356,6 +351,27 @@ public sealed class MainForm : Form
         {
             _resizeDebounceTimer.Stop();
             _resizeDebounceTimer.Start();
+        };
+
+        ResizeEnd += (_, _) =>
+        {
+            _resizeDebounceTimer.Stop();
+            if (!IsDisposed && !Disposing)
+            {
+                RenderCurrentPage();
+            }
+        };
+
+        SizeChanged += (_, _) =>
+        {
+            if (WindowState == FormWindowState.Maximized || WindowState == FormWindowState.Normal)
+            {
+                _resizeDebounceTimer.Stop();
+                if (!IsDisposed && !Disposing)
+                {
+                    RenderCurrentPage();
+                }
+            }
         };
 
         pnlMainArea.Controls.Clear();
@@ -385,14 +401,12 @@ public sealed class MainForm : Form
         _statsTimer = new System.Windows.Forms.Timer { Interval = 1000 };
         _statsTimer.Tick += (_, _) =>
         {
-            if (_audioService.State == AudioEngineState.Running)
+            if (_audioService.State == AudioEngineState.Running && _lblWaveContext != null)
             {
                 var dur = _audioService.RunningDuration;
                 if (dur.HasValue)
                 {
-                    string fmt = FormatTime(dur.Value);
-                    if (_lblStatDuration != null) _lblStatDuration.Text = fmt;
-                    if (_lblOverviewDuration != null) _lblOverviewDuration.Text = fmt;
+                    _lblWaveContext.Text = $"{_settings.PreferredDeviceName} • Session: {FormatTime(dur.Value)}";
                 }
             }
         };
@@ -412,11 +426,11 @@ public sealed class MainForm : Form
 
     private (int Width, int Left) GetResponsiveLayout()
     {
+        float dpiScale = DeviceDpi / 96f;
+        int horizontalMargin = (int)(24 * dpiScale);
         int viewport = Math.Max(320, _contentContainer.ClientSize.Width);
-        int available = Math.Max(280, viewport - 56);
-        int width = Math.Min(1060, available);
-        int left = Math.Max(16, (viewport - width) / 2);
-        return (width, left);
+        int width = Math.Max(280, viewport - (horizontalMargin * 2));
+        return (width, horizontalMargin);
     }
 
     private void AddNavButton(Panel container, string displayText, string pageTag, int index, float dpiScale)
@@ -482,6 +496,7 @@ public sealed class MainForm : Form
     private void RenderCurrentPage()
     {
         _contentContainer.SuspendLayout();
+        _contentContainer.AutoScrollPosition = new Point(0, 0);
         _contentContainer.Controls.Clear();
 
         switch (_activePage)
@@ -511,6 +526,28 @@ public sealed class MainForm : Form
             default:
                 RenderDashboardPage();
                 break;
+        }
+
+        // Measure actual rendered content height to remove side scrollbars when content fits in window
+        int maxBottom = 0;
+        foreach (Control c in _contentContainer.Controls)
+        {
+            maxBottom = Math.Max(maxBottom, c.Bottom + (int)(16 * (DeviceDpi / 96f)));
+        }
+
+        if (maxBottom <= _contentContainer.ClientSize.Height)
+        {
+            _contentContainer.AutoScroll = false;
+            _contentContainer.VerticalScroll.Visible = false;
+            _contentContainer.VerticalScroll.Enabled = false;
+            _contentContainer.HorizontalScroll.Visible = false;
+            _contentContainer.HorizontalScroll.Enabled = false;
+        }
+        else
+        {
+            _contentContainer.AutoScroll = true;
+            _contentContainer.HorizontalScroll.Visible = false;
+            _contentContainer.HorizontalScroll.Enabled = false;
         }
 
         _contentContainer.ResumeLayout(true);
@@ -572,13 +609,13 @@ public sealed class MainForm : Form
         };
 
         // Stat Card 1: Bluetooth Speaker Battery (Real-time Battery % from HOCO HC22)
-        _lblStatStreams = new Label();
+        _lblStatBattery = new Label();
         pnlStatsGrid.Controls.Add(CreateStatCard(
             0, cardWidth, cardHeight,
             "🔋", "Speaker Battery (HOCO HC22)",
             "85%",
             "↗ Normal",
-            _lblStatStreams,
+            _lblStatBattery,
             ColorSuccess));
 
         // Stat Card 2: Audio Playback Endpoint
@@ -711,7 +748,7 @@ public sealed class MainForm : Form
         // --- Active Applications Section ---
         var lblSectionTitle = new Label
         {
-            Text = "Active Applications",
+            Text = "Bluetooth Speaker Battery & Audio Hardware",
             Font = new Font("Segoe UI", 13F, FontStyle.Bold),
             ForeColor = TextPrimary,
             Location = new Point(0, curY),
@@ -722,7 +759,7 @@ public sealed class MainForm : Form
 
         var lblSectionSub = new Label
         {
-            Text = "Manage individual app volumes and output devices",
+            Text = "Real-time battery telemetry, device routing, and mic call-handoff status",
             Font = new Font("Segoe UI", 9F),
             ForeColor = TextSecondary,
             Location = new Point(2, curY),
@@ -1362,8 +1399,8 @@ public sealed class MainForm : Form
 
         var chkStartup = new CheckBox
         {
-            Text = "Start HOCO KeepAlive automatically when signing in to Windows",
-            Checked = _settings.LaunchAtWindowsStartup,
+            Text = "Start Bluetooth KeepAlive automatically when signing in to Windows",
+            Checked = _settings.StartOnWindowsStartup,
             ForeColor = TextPrimary,
             Font = new Font("Segoe UI", 9.5F),
             Location = new Point(24, 24),
@@ -1371,7 +1408,7 @@ public sealed class MainForm : Form
         };
         chkStartup.CheckedChanged += (_, _) =>
         {
-            _settings.LaunchAtWindowsStartup = chkStartup.Checked;
+            _settings.StartOnWindowsStartup = chkStartup.Checked;
             _settings.Save();
         };
 
@@ -1487,7 +1524,7 @@ public sealed class MainForm : Form
 
         var lblApp = new Label
         {
-            Text = "HOCO KeepAlive — Version 1.0.4",
+            Text = "Bluetooth KeepAlive — Version 1.0.4",
             Font = new Font("Segoe UI", 12F, FontStyle.Bold),
             ForeColor = TextPrimary,
             Location = new Point(24, 20),
@@ -1524,7 +1561,7 @@ public sealed class MainForm : Form
             Cursor = Cursors.Hand
         };
         btnGithub.FlatAppearance.BorderSize = 0;
-        btnGithub.Click += (_, _) => OpenUrl("https://github.com/tausif-rahaman-raiyan/HocoKeepAlive");
+        btnGithub.Click += (_, _) => OpenUrl("https://github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive");
 
         card.Controls.Add(lblApp);
         card.Controls.Add(lblDesc);
@@ -1587,14 +1624,9 @@ public sealed class MainForm : Form
             _btnOverviewToggle.ForeColor = isRunning ? AccentCrimsonGlow : Color.White;
         }
 
-        if (_lblStatStreams != null)
+        if (_lblStatBattery != null)
         {
-            _lblStatStreams.Text = isRunning ? "1" : "0";
-        }
-
-        if (_lblStatContinuity != null)
-        {
-            _lblStatContinuity.Text = isRunning ? "100%" : (isCall ? "Standby" : "Idle");
+            _lblStatBattery.Text = isRunning ? "85%" : (isCall ? "Standby" : "85%");
         }
     }
 
