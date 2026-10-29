@@ -8,7 +8,7 @@ public static class AudioDeviceService
 {
     private static readonly string[] BluetoothKeywords =
     {
-        "bluetooth", "hoco", "hc22", "wireless", "hands-free", "headset",
+        "bluetooth", "wireless", "hands-free", "headset",
         "earbud", "soundbox", "speaker", "a2dp", "bt"
     };
 
@@ -51,7 +51,7 @@ public static class AudioDeviceService
     }
 
     /// <summary>
-    /// Finds the best matching Bluetooth soundbox or speaker (e.g., HOCO HC22 or any Bluetooth device).
+    /// Finds the best matching Bluetooth soundbox or speaker.
     /// </summary>
     public static AudioDeviceInfo? FindBluetoothSoundbox(string? preferredName = null)
     {
@@ -64,12 +64,7 @@ public static class AudioDeviceService
             if (match != null) return match;
         }
 
-        // 2. Try finding HOCO or HC22 device
-        var hoco = devices.FirstOrDefault(d => d.Name.Contains("HOCO", StringComparison.OrdinalIgnoreCase) ||
-                                               d.Name.Contains("HC22", StringComparison.OrdinalIgnoreCase));
-        if (hoco != null) return hoco;
-
-        // 3. Try finding any Bluetooth soundbox / speaker
+        // 2. Try finding any Bluetooth soundbox / speaker
         var bt = devices.FirstOrDefault(d => d.IsBluetooth);
         if (bt != null) return bt;
 
@@ -93,7 +88,7 @@ public static class AudioDeviceService
     }
 
     /// <summary>
-    /// Looks for a matching device by name (e.g. "HOCO", "HC22", or preferred name).
+    /// Looks for a matching device by name (e.g. preferred name).
     /// </summary>
     public static AudioDeviceInfo? FindDeviceByName(string? preferredName)
     {
@@ -105,8 +100,7 @@ public static class AudioDeviceService
         if (match != null) return match;
 
         // Partial match
-        return devices.FirstOrDefault(d => d.Name.Contains(preferredName, StringComparison.OrdinalIgnoreCase) ||
-                                           (preferredName.Contains("HOCO", StringComparison.OrdinalIgnoreCase) && d.Name.Contains("HOCO", StringComparison.OrdinalIgnoreCase)));
+        return devices.FirstOrDefault(d => d.Name.Contains(preferredName, StringComparison.OrdinalIgnoreCase));
     }
 }
 

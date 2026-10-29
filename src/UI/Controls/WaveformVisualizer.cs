@@ -8,7 +8,7 @@ public sealed class WaveformVisualizer : Control
     private float _phase;
     private bool _isActive;
     private bool _isCallStandby;
-    private string _audioContextText = "HOCO HC22 · Low-Overhead Silent Stream (48,000 Hz)";
+    private string _audioContextText = "Bluetooth Wireless Speaker · Low-Overhead Silent Stream (48,000 Hz)";
 
     public bool IsActive
     {
@@ -142,7 +142,7 @@ public sealed class WaveformVisualizer : Control
             DrawSinWave(g, idlePen, w, midY, 8f, 0.012f, _phase * 0.4f);
 
             // Center Idle Text
-            string idleMsg = "SILENT KEEP-ALIVE IDLE · CLICK START TO KEEP HOCO HC22 AWAKE";
+            string idleMsg = "SILENT KEEP-ALIVE IDLE · CLICK START TO MAINTAIN BLUETOOTH SPEAKER CONNECTION";
             using var font = new Font("Segoe UI", 8.5F, FontStyle.Regular);
             var sz = g.MeasureString(idleMsg, font);
             using var textBrush = new SolidBrush(Color.FromArgb(120, 130, 155));

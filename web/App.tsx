@@ -28,12 +28,11 @@ export default function App() {
   const [isRunning, setIsRunning] = useState<boolean>(true);
   const [batteryLevel, setBatteryLevel] = useState<number>(85);
   const [isCharging, setIsCharging] = useState<boolean>(false);
-  const [selectedDevice, setSelectedDevice] = useState<string>('HOCO HC22 Stereo');
+  const [selectedDevice, setSelectedDevice] = useState<string>('Wireless Bluetooth Speaker');
   const [callProtectionActive, setCallProtectionActive] = useState<boolean>(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const animFrameRef = useRef<number | null>(null);
   const phaseRef = useRef<number>(0);
 
   const showToast = (msg: string) => {
@@ -56,20 +55,35 @@ export default function App() {
     }
   }, []);
 
-  // Ribbon Waveform Animation (exact match to image)
+  // Ribbon Waveform Animation (starts and keeps running when Dashboard tab is active)
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (activeTab !== 'dashboard') return;
 
     let running = true;
+    let animId: number;
 
     const render = () => {
       if (!running) return;
 
-      const width = (canvas.width = canvas.offsetWidth * window.devicePixelRatio || 800);
-      const height = (canvas.height = canvas.offsetHeight * window.devicePixelRatio || 180);
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        animId = requestAnimationFrame(render);
+        return;
+      }
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        animId = requestAnimationFrame(render);
+        return;
+      }
+
+      const desiredWidth = Math.floor(canvas.offsetWidth * window.devicePixelRatio) || 800;
+      const desiredHeight = Math.floor(canvas.offsetHeight * window.devicePixelRatio) || 180;
+      if (canvas.width !== desiredWidth || canvas.height !== desiredHeight) {
+        canvas.width = desiredWidth;
+        canvas.height = desiredHeight;
+      }
+      const width = canvas.width;
+      const height = canvas.height;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -169,16 +183,16 @@ export default function App() {
         ctx.restore();
       });
 
-      animFrameRef.current = requestAnimationFrame(render);
+      animId = requestAnimationFrame(render);
     };
 
-    animFrameRef.current = requestAnimationFrame(render);
+    animId = requestAnimationFrame(render);
 
     return () => {
       running = false;
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (animId) cancelAnimationFrame(animId);
     };
-  }, [isRunning]);
+  }, [isRunning, activeTab]);
 
   const toggleKeepAlive = () => {
     if (isRunning) {
@@ -191,7 +205,7 @@ export default function App() {
   };
 
   const endpoints: AudioEndpoint[] = [
-    { id: '1', name: 'HOCO HC22 Stereo (Soundbox)', category: 'Bluetooth Playback Device', volume: 100, status: isRunning ? 'active' : 'idle', isBluetooth: true },
+    { id: '1', name: selectedDevice, category: 'Bluetooth Playback Device · Connected', volume: 100, status: isRunning ? 'active' : 'idle', isBluetooth: true },
     { id: '2', name: 'WhatsApp Voice & Video Call', category: 'Communications / Mic Watchdog', volume: 85, status: 'standby' },
     { id: '3', name: 'Spotify / YouTube Music', category: 'Media Application (Auto-Pause)', volume: 65, status: 'idle' },
     { id: '4', name: 'Windows System Sounds', category: 'System Audio Mapper', volume: 40, status: 'idle' }
@@ -388,7 +402,7 @@ export default function App() {
                   <div className="mt-4">
                     <div className="flex items-baseline justify-between">
                       <p className="text-3xl font-extrabold text-white tracking-tight">{batteryLevel}%</p>
-                      <span className="text-[11px] font-mono text-[#7F869A]">HOCO HC22</span>
+                      <span className="text-[11px] font-mono text-[#7F869A]">{selectedDevice}</span>
                     </div>
                     <p className="text-xs text-[#7F869A] font-medium mt-1">Speaker Battery (Real-time Telemetry)</p>
                     <div className="w-full h-1.5 bg-[#252733] rounded-full mt-3 overflow-hidden">
@@ -433,7 +447,11 @@ export default function App() {
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-[15px] font-bold text-white tracking-tight">Current Audio Context</h3>
-                    <p className="text-[13px] text-[#7F869A] mt-0.5">Safari • {selectedDevice}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className={`w-2 h-2 rounded-full ${isRunning ? 'bg-[#10B981] animate-pulse' : 'bg-[#7F869A]'}`} />
+                      <span className="text-[13px] font-semibold text-white">{selectedDevice}</span>
+                      <span className="text-xs text-[#7F869A]">• Connected Bluetooth Speaker</span>
+                    </div>
                   </div>
 
                   {/* Enhanced Pill Badge */}
@@ -455,8 +473,8 @@ export default function App() {
                     </span>
                   </div>
 
-                  <div className="absolute top-3 right-4 text-[10px] font-mono text-[#626880] pointer-events-none">
-                    HOCO HC22 · Low-Overhead
+                  <div className="absolute top-3 right-4 text-[10px] font-mono text-[#8E95A5] pointer-events-none">
+                    {selectedDevice} · Active Output
                   </div>
                 </div>
 
@@ -487,7 +505,7 @@ export default function App() {
                   </div>
                   <span className="text-xs font-semibold text-[#10B981] bg-[#10B981]/10 border border-[#10B981]/30 px-3 py-1 rounded-full flex items-center gap-1.5">
                     <Battery className="w-3.5 h-3.5" />
-                    <span>{batteryLevel}% Battery · HOCO HC22</span>
+                    <span>{batteryLevel}% Battery · {selectedDevice}</span>
                   </span>
                 </div>
 
@@ -544,10 +562,10 @@ export default function App() {
                 <div className="flex items-center justify-between p-3 rounded-xl bg-[#0B0C10] border border-[#222432]">
                   <div>
                     <p className="text-sm font-bold text-white">Bluetooth Soundbox Priority</p>
-                    <p className="text-xs text-[#7F869A]">Direct keep-alive stream straight to HOCO HC22</p>
+                    <p className="text-xs text-[#7F869A]">Direct keep-alive stream straight to {selectedDevice}</p>
                   </div>
                   <button
-                    onClick={() => showToast('HOCO HC22 Bluetooth Soundbox Prioritized')}
+                    onClick={() => showToast(`${selectedDevice} Prioritized`)}
                     className="px-4 py-1.5 rounded-lg bg-[#FF2E63] text-white text-xs font-bold hover:bg-[#FF3B69]"
                   >
                     Prioritize BT
@@ -580,7 +598,7 @@ export default function App() {
 
               <div className="bg-[#171820] border border-[#252733] rounded-2xl p-6 space-y-3">
                 {[
-                  { name: 'HOCO HC22 Stereo', desc: 'Bluetooth Soundbox (A2DP)', badge: 'Recommended' },
+                  { name: 'Wireless Bluetooth Speaker', desc: 'Bluetooth Soundbox (A2DP)', badge: 'Recommended' },
                   { name: 'Realtek High Definition Audio', desc: 'Motherboard Speaker', badge: 'Default' },
                   { name: 'External USB DAC / Soundcard', desc: 'Auxiliary Endpoint', badge: 'Aux' }
                 ].map((d) => (
@@ -624,7 +642,7 @@ export default function App() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-bold text-white">Start with Windows</p>
-                    <p className="text-xs text-[#7F869A]">Launch HOCO KeepAlive automatically on user sign-in</p>
+                    <p className="text-xs text-[#7F869A]">Launch Keep Alive automatically on user sign-in</p>
                   </div>
                   <input type="checkbox" defaultChecked className="w-4 h-4 accent-[#FF3B69]" />
                 </div>
@@ -664,10 +682,13 @@ export default function App() {
             href="https://github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive"
             target="_blank"
             rel="noreferrer"
-            className="text-[#C9D5FF] hover:text-white flex items-center gap-1 transition-colors"
+            className="text-[#C9D5FF] hover:text-white flex items-center gap-1.5 transition-colors font-medium"
           >
+            <svg className="w-3.5 h-3.5 fill-current text-white/80" viewBox="0 0 24 24">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
             <span>github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive</span>
-            <ExternalLink className="w-3 h-3" />
+            <ExternalLink className="w-3 h-3 text-[#7F869A]" />
           </a>
         </footer>
       </div>

@@ -101,7 +101,7 @@ public sealed class AudioKeepAliveService : IDisposable
     }
 
     /// <summary>
-    /// When enabled, prefers routing to a connected Bluetooth soundbox / speaker (e.g. HOCO HC22)
+    /// When enabled, prefers routing to a connected Bluetooth soundbox / speaker
     /// rather than generic Windows system sound or motherboard speakers.
     /// </summary>
     public bool PreferBluetoothSoundbox
@@ -543,7 +543,7 @@ public sealed class AudioKeepAliveService : IDisposable
     }
 
     /// <summary>
-    /// Scans for and automatically selects a connected Bluetooth soundbox or speaker (e.g. HOCO HC22).
+    /// Scans for and automatically selects a connected Bluetooth soundbox or speaker.
     /// </summary>
     public bool AutoSelectBluetoothSoundbox()
     {

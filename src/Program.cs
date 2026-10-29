@@ -4,7 +4,7 @@ namespace HocoKeepAlive;
 
 internal static class Program
 {
-    private const string AppMutexName = @"Local\HOCO_KeepAlive_SingleInstance_Mutex_9E6F1B51";
+    private const string AppMutexName = @"Local\KeepAlive_SingleInstance_Mutex_9E6F1B51";
 
     [STAThread]
     private static void Main(string[] args)

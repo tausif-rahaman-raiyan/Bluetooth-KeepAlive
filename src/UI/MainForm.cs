@@ -608,13 +608,13 @@ public sealed class MainForm : Form
             BackColor = Color.Transparent
         };
 
-        // Stat Card 1: Bluetooth Speaker Battery (Real-time Battery % from HOCO HC22)
+        // Stat Card 1: Bluetooth Speaker Battery (Real-time Battery %)
         _lblStatBattery = new Label();
         pnlStatsGrid.Controls.Add(CreateStatCard(
             0, cardWidth, cardHeight,
-            "🔋", "Speaker Battery (HOCO HC22)",
+            "🔋", "Speaker Battery",
             "85%",
-            "↗ Normal",
+            "↗ Connected",
             _lblStatBattery,
             ColorSuccess));
 
@@ -623,7 +623,7 @@ public sealed class MainForm : Form
         pnlStatsGrid.Controls.Add(CreateStatCard(
             cardWidth + gap, cardWidth, cardHeight,
             "🎧", "Audio Playback Endpoint",
-            _settings.PreferredDeviceName.Contains("HOCO", StringComparison.OrdinalIgnoreCase) ? "HOCO HC22" : "1 Device",
+            _settings.PreferredDeviceName,
             "↗ Ready",
             _lblStatDevice,
             AccentCrimsonGlow));
@@ -660,11 +660,11 @@ public sealed class MainForm : Form
 
         _lblWaveContext = new Label
         {
-            Text = "Safari • " + _settings.PreferredDeviceName,
-            Font = new Font("Segoe UI", 8.8F),
-            ForeColor = TextSecondary,
+            Text = "● Connected Speaker: " + _settings.PreferredDeviceName,
+            Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+            ForeColor = AccentCrimsonGlow,
             Location = new Point((int)(20 * dpiScale), (int)(38 * dpiScale)),
-            Size = new Size(contentWidth - 200, 20)
+            Size = new Size(contentWidth - 200, 24)
         };
 
         var lblEnhancedBadge = new Label
@@ -785,7 +785,7 @@ public sealed class MainForm : Form
             0, trioWidth, trioHeight,
             "ᛒ Bluetooth Soundbox",
             _settings.PreferredDeviceName,
-            "Target: HOCO HC22 (A2DP High-Def)",
+            "Target: " + _settings.PreferredDeviceName + " (A2DP High-Def)",
             "Prioritize BT Soundbox",
             ColorSuccess,
             () =>
@@ -800,7 +800,7 @@ public sealed class MainForm : Form
                 }
                 else
                 {
-                    MessageBox.Show("No active Bluetooth soundbox found. Turn on your HOCO HC22 and pair it in Windows Bluetooth settings.", "Bluetooth Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("No active Bluetooth soundbox found. Turn on your Bluetooth speaker and pair it in Windows Bluetooth settings.", "Bluetooth Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }));
 
@@ -814,7 +814,7 @@ public sealed class MainForm : Form
             AccentLavender,
             () =>
             {
-                MessageBox.Show("Call Protection is actively monitoring Windows Communications capture sessions. When WhatsApp initiates a voice or video call, HOCO KeepAlive instantly releases the playback endpoint so your Bluetooth mic is never locked.", "Call Protection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Call Protection is actively monitoring Windows Communications capture sessions. When WhatsApp initiates a voice or video call, Keep Alive instantly releases the playback endpoint so your Bluetooth mic is never locked.", "Call Protection", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }));
 
         // Panel 3: Auto-Reconnect Watchdog
@@ -1159,7 +1159,7 @@ public sealed class MainForm : Form
 
         var lblSub = new Label
         {
-            Text = "Select your HOCO HC22 speaker or let HOCO KeepAlive auto-target Bluetooth devices",
+            Text = "Select your connected speaker or let Keep Alive auto-target Bluetooth devices",
             Font = new Font("Segoe UI", 10F),
             ForeColor = TextSecondary,
             Location = new Point(2, curY),
@@ -1309,7 +1309,7 @@ public sealed class MainForm : Form
 
         var lblExplBody = new Label
         {
-            Text = "Classic Bluetooth hardware cannot simultaneously transmit stereo A2DP audio and two-way microphone communication. When an application streams audio through Bluetooth, Windows locks the device, causing WhatsApp to report that the microphone is unavailable.\n\nHOCO KeepAlive actively listens for communications microphone activity. The moment a call starts, KeepAlive completely disposes the playback endpoint and pauses. When your call finishes, it automatically resumes silent streaming after a 2.5-second cooldown.",
+            Text = "Classic Bluetooth hardware cannot simultaneously transmit stereo A2DP audio and two-way microphone communication. When an application streams audio through Bluetooth, Windows locks the device, causing WhatsApp to report that the microphone is unavailable.\n\nKeep Alive actively listens for communications microphone activity. The moment a call starts, Keep Alive completely disposes the playback endpoint and pauses. When your call finishes, it automatically resumes silent streaming after a 2.5-second cooldown.",
             Font = new Font("Segoe UI", 9.2F),
             ForeColor = TextSecondary,
             Location = new Point(24, 52),
@@ -1487,7 +1487,7 @@ public sealed class MainForm : Form
 
         var lblTitle = new Label
         {
-            Text = "About HOCO KeepAlive",
+            Text = "About Bluetooth KeepAlive",
             Font = new Font("Segoe UI", 22F, FontStyle.Bold),
             ForeColor = TextPrimary,
             Location = new Point(0, curY),
@@ -1533,7 +1533,7 @@ public sealed class MainForm : Form
 
         var lblDesc = new Label
         {
-            Text = "Designed specifically for the HOCO HC22 Bluetooth speaker and other wireless audio devices to prevent unwanted sleep standby and connection drops. Generates an imperceptible, lightweight 48 kHz silent stream using NAudio with zero CPU and memory footprint.",
+            Text = "Designed specifically for Bluetooth speakers and wireless audio devices to prevent unwanted sleep standby and connection drops. Generates an imperceptible, lightweight 48 kHz silent stream using NAudio with zero CPU and memory footprint.",
             Font = new Font("Segoe UI", 9.2F),
             ForeColor = TextSecondary,
             Location = new Point(24, 52),

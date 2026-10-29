@@ -43,7 +43,7 @@ public sealed class KeepAliveContext : ApplicationContext
         // 2. Start Keep-Alive / Stop Keep-Alive
         // 3. Exit
         var menu = new ContextMenuStrip();
-        menu.Items.Add(new ToolStripMenuItem("Open Dashboard", null, (_, _) => ShowPage("Overview")));
+        menu.Items.Add(new ToolStripMenuItem("Open Dashboard", null, (_, _) => ShowPage("Dashboard")));
 
         _toggleItem = new ToolStripMenuItem("Start Keep-Alive", null, (_, _) => _audioService.Toggle())
         {
@@ -57,7 +57,7 @@ public sealed class KeepAliveContext : ApplicationContext
         _tray = new NotifyIcon
         {
             Icon = _appIcon,
-            Text = "HOCO KeepAlive — Stopped",
+            Text = "Keep Alive — Stopped",
             ContextMenuStrip = menu,
             Visible = true
         };
@@ -76,7 +76,7 @@ public sealed class KeepAliveContext : ApplicationContext
 
         if (_settings.ShowNotifications)
         {
-            _tray.ShowBalloonTip(2000, "HOCO KeepAlive", "Ready in notification area. Right-click or double-click to start.", ToolTipIcon.Info);
+            _tray.ShowBalloonTip(2000, "Keep Alive", "Ready in notification area. Right-click or double-click to start.", ToolTipIcon.Info);
         }
 
         if (_settings.AutoStartStreamOnLaunch)
@@ -86,10 +86,10 @@ public sealed class KeepAliveContext : ApplicationContext
 
         if (!startMinimized && !_settings.StartMinimizedToTray)
         {
-            ShowPage("Overview");
+            ShowPage("Dashboard");
         }
 
-        LogService.Log(LogSeverity.Info, "Lifecycle", "HOCO KeepAlive context initialized.");
+        LogService.Log(LogSeverity.Info, "Lifecycle", "Keep Alive context initialized.");
     }
 
     private static Icon LoadAppIcon()
@@ -141,52 +141,52 @@ public sealed class KeepAliveContext : ApplicationContext
         {
             case AudioEngineState.Running:
                 _toggleItem.Text = "Stop Keep-Alive";
-                _tray.Text = "HOCO KeepAlive — Running";
+                _tray.Text = "Keep Alive — Running";
                 if (_settings.ShowNotifications && _settings.NotifyOnStartStop)
                 {
-                    _tray.ShowBalloonTip(1500, "HOCO KeepAlive", "Silent stream active. Bluetooth audio connection is maintained.", ToolTipIcon.Info);
+                    _tray.ShowBalloonTip(1500, "Keep Alive", "Silent stream active. Bluetooth audio connection is maintained.", ToolTipIcon.Info);
                 }
                 break;
 
             case AudioEngineState.PausedByOtherAudio:
                 _toggleItem.Text = "Stop Keep-Alive";
-                _tray.Text = "HOCO KeepAlive — Standby (Media active)";
+                _tray.Text = "Keep Alive — Standby (Media active)";
                 break;
 
             case AudioEngineState.PausedByCallOrMic:
                 _toggleItem.Text = "Stop Keep-Alive";
-                _tray.Text = "HOCO KeepAlive — Standby (Call/Mic active)";
+                _tray.Text = "Keep Alive — Standby (Call/Mic active)";
                 break;
 
             case AudioEngineState.Recovering:
                 _toggleItem.Text = "Stop Keep-Alive";
-                _tray.Text = "HOCO KeepAlive — Auto-reconnecting";
+                _tray.Text = "Keep Alive — Auto-reconnecting";
                 break;
 
             case AudioEngineState.DeviceUnavailable:
                 _toggleItem.Text = "Start Keep-Alive";
-                _tray.Text = "HOCO KeepAlive — Unavailable";
+                _tray.Text = "Keep Alive — Unavailable";
                 if (_settings.ShowNotifications && _settings.NotifyOnError)
                 {
-                    _tray.ShowBalloonTip(2000, "HOCO KeepAlive", "Selected device is unavailable. Please check your Bluetooth connection.", ToolTipIcon.Warning);
+                    _tray.ShowBalloonTip(2000, "Keep Alive", "Selected device is unavailable. Please check your Bluetooth connection.", ToolTipIcon.Warning);
                 }
                 break;
 
             case AudioEngineState.Error:
                 _toggleItem.Text = "Start Keep-Alive";
-                _tray.Text = "HOCO KeepAlive — Error";
+                _tray.Text = "Keep Alive — Error";
                 if (_settings.ShowNotifications && _settings.NotifyOnError)
                 {
-                    _tray.ShowBalloonTip(2500, "HOCO KeepAlive", $"Audio error: {message ?? "Unknown error"}", ToolTipIcon.Error);
+                    _tray.ShowBalloonTip(2500, "Keep Alive", $"Audio error: {message ?? "Unknown error"}", ToolTipIcon.Error);
                 }
                 break;
 
             default:
                 _toggleItem.Text = "Start Keep-Alive";
-                _tray.Text = "HOCO KeepAlive — Stopped";
+                _tray.Text = "Keep Alive — Stopped";
                 if (_settings.ShowNotifications && _settings.NotifyOnStartStop && state == AudioEngineState.Stopped)
                 {
-                    _tray.ShowBalloonTip(1200, "HOCO KeepAlive", "Silent stream stopped.", ToolTipIcon.Info);
+                    _tray.ShowBalloonTip(1200, "Keep Alive", "Silent stream stopped.", ToolTipIcon.Info);
                 }
                 break;
         }
