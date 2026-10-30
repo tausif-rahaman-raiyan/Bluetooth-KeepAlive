@@ -1,4 +1,4 @@
-name: Keep Alive — Single Windows Build & Release
+name: Keep Alive — Windows Setup Build & Release
 
 on:
   push:
@@ -32,7 +32,7 @@ env:
 
 jobs:
   build-setup:
-    name: Build Keep Alive Windows 10/11 x64 Deliverables
+    name: Build Keep Alive Windows Setup EXE
     runs-on: windows-latest
     timeout-minutes: 25
 
@@ -89,7 +89,7 @@ jobs:
             Write-Host "Tests project not present, skipping test step."
           }
 
-      - name: 8. Publish self-contained Windows x64 binary with dynamic version
+      - name: 8. Publish self-contained Windows x64 binary
         shell: pwsh
         run: |
           $ver = "$env:APP_VER"
@@ -122,7 +122,7 @@ jobs:
           }
           Write-Host "Inno Setup ready at $iscc"
 
-      - name: 10. Compile Windows 10/11 Setup Installer EXE
+      - name: 10. Compile Windows Setup EXE Installer
         shell: pwsh
         run: |
           $ver = "$env:APP_VER"
@@ -140,35 +140,19 @@ jobs:
           }
           Write-Host "SUCCESS: Windows Setup EXE generated at $setupExe ($($item.Length) bytes)."
 
-      - name: 11. Create portable ZIP and standalone EXE package
-        shell: pwsh
-        run: |
-          $ver = "$env:APP_VER"
-          New-Item -ItemType Directory -Force -Path "deliverables" | Out-Null
-          Copy-Item "publish/Keep Alive.exe" "deliverables/Keep-Alive-$ver.exe"
-          Compress-Archive -Path "publish/*" -DestinationPath "deliverables/Keep-Alive-Portable-$ver-win-x64.zip" -Force
-          if (!(Test-Path "deliverables/Keep-Alive-$ver.exe")) { throw "Standalone EXE missing." }
-          if (!(Test-Path "deliverables/Keep-Alive-Portable-$ver-win-x64.zip")) { throw "Portable ZIP missing." }
-
-      - name: 12. Upload all Windows deliverables
+      - name: 11. Upload Windows Setup EXE Artifact
         uses: actions/upload-artifact@v4.6.1
         with:
-          name: Keep-Alive-Windows-v${{ env.APP_VER }}
-          path: |
-            installer-output/Keep-Alive-Setup-${{ env.APP_VER }}.exe
-            deliverables/Keep-Alive-${{ env.APP_VER }}.exe
-            deliverables/Keep-Alive-Portable-${{ env.APP_VER }}-win-x64.zip
+          name: Keep-Alive-Setup-v${{ env.APP_VER }}
+          path: installer-output/Keep-Alive-Setup-${{ env.APP_VER }}.exe
           if-no-files-found: error
           retention-days: 90
 
-      - name: 13. Auto Create/Update GitHub Release on Every Push
+      - name: 12. Create/Update GitHub Release with Setup EXE
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            installer-output/Keep-Alive-Setup-${{ env.APP_VER }}.exe
-            deliverables/Keep-Alive-${{ env.APP_VER }}.exe
-            deliverables/Keep-Alive-Portable-${{ env.APP_VER }}-win-x64.zip
-          name: "Keep Alive v${{ env.APP_VER }} (Windows 11 / 10 Setup)"
+          files: installer-output/Keep-Alive-Setup-${{ env.APP_VER }}.exe
+          name: "Keep Alive v${{ env.APP_VER }} (Windows Setup Installer)"
           tag_name: "v${{ env.APP_VER }}"
           draft: false
           prerelease: false

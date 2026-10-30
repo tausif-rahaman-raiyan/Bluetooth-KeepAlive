@@ -1463,6 +1463,150 @@ public sealed class MainForm : Form
         card.Controls.Add(chkNotifications);
 
         pnl.Controls.Add(card);
+        curY += (int)(280 * dpiScale);
+
+        // --- Software Updates & Auto-Installer Card ---
+        var cardUpdates = new Panel
+        {
+            Location = new Point(0, curY),
+            Size = new Size(contentWidth, (int)(230 * dpiScale)),
+            BackColor = SurfacePrimary,
+            Padding = new Padding(24)
+        };
+        cardUpdates.Paint += (s, e) =>
+        {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            using var pen = new Pen(BorderColor);
+            using var path = CreateRoundedRectanglePath(new Rectangle(0, 0, cardUpdates.Width - 1, cardUpdates.Height - 1), 12);
+            e.Graphics.DrawPath(pen, path);
+        };
+
+        var lblUpdateHead = new Label
+        {
+            Text = "⚡ GitHub Software Updates & Auto-Installer",
+            Font = new Font("Segoe UI", 11.5F, FontStyle.Bold),
+            ForeColor = AccentCrimsonGlow,
+            Location = new Point(24, 18),
+            AutoSize = true
+        };
+
+        var lblUpdateInfo = new Label
+        {
+            Text = "Target Repository: github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive\nCurrent Version: v" + UpdateService.CurrentVersion + " (Windows 11 / 10 x64)",
+            Font = new Font("Segoe UI", 9F),
+            ForeColor = TextSecondary,
+            Location = new Point(24, 48),
+            Size = new Size(contentWidth - 48, 38)
+        };
+
+        var lblUpdateStatus = new Label
+        {
+            Text = "● Click 'Check for Updates' to query the latest build from GitHub Releases.",
+            Font = new Font("Segoe UI", 8.8F, FontStyle.Bold),
+            ForeColor = ColorSuccess,
+            Location = new Point(24, 90),
+            Size = new Size(contentWidth - 48, 22)
+        };
+
+        var btnCheckInSettings = new Button
+        {
+            Text = "🔍 Check for Updates",
+            Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+            ForeColor = Color.White,
+            BackColor = SurfaceSecondary,
+            FlatStyle = FlatStyle.Flat,
+            Size = new Size(180, 36),
+            Location = new Point(24, 126),
+            Cursor = Cursors.Hand
+        };
+        btnCheckInSettings.FlatAppearance.BorderSize = 0;
+
+        var btnDownloadReplace = new Button
+        {
+            Text = "🚀 Download & Replace App",
+            Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+            ForeColor = Color.White,
+            BackColor = AccentCrimson,
+            FlatStyle = FlatStyle.Flat,
+            Size = new Size(220, 36),
+            Location = new Point(214, 126),
+            Cursor = Cursors.Hand
+        };
+        btnDownloadReplace.FlatAppearance.BorderSize = 0;
+
+        var btnPairInSettings = new Button
+        {
+            Text = "🔗 Re-Pair Speaker",
+            Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+            ForeColor = Color.White,
+            BackColor = SurfaceSecondary,
+            FlatStyle = FlatStyle.Flat,
+            Size = new Size(160, 36),
+            Location = new Point(444, 126),
+            Cursor = Cursors.Hand
+        };
+        btnPairInSettings.FlatAppearance.BorderSize = 0;
+
+        btnCheckInSettings.Click += async (_, _) =>
+        {
+            btnCheckInSettings.Enabled = false;
+            lblUpdateStatus.Text = "⏳ Contacting GitHub API for releases...";
+            var info = await UpdateService.CheckForUpdatesAsync();
+            btnCheckInSettings.Enabled = true;
+
+            if (info.IsUpdateAvailable)
+            {
+                lblUpdateStatus.ForeColor = AccentCrimsonGlow;
+                lblUpdateStatus.Text = $"★ New Update Available: {info.ReleaseName} (v{info.LatestVersion})";
+                MessageBox.Show($"New Version Available!\n\nRelease: {info.ReleaseName}\nTag: v{info.LatestVersion}\n\nChangelog:\n{info.ReleaseNotes}\n\nClick 'Download & Replace App' to install the new version automatically.", "Update Available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                lblUpdateStatus.ForeColor = ColorSuccess;
+                lblUpdateStatus.Text = $"✔ You are running the latest version (v{info.CurrentVersion}).";
+            }
+        };
+
+        btnDownloadReplace.Click += async (_, _) =>
+        {
+            btnDownloadReplace.Enabled = false;
+            lblUpdateStatus.Text = "⏳ Checking GitHub for setup installer URL...";
+            var info = await UpdateService.CheckForUpdatesAsync();
+
+            string? url = info.SetupDownloadUrl;
+            if (string.IsNullOrEmpty(url))
+            {
+                url = $"https://github.com/{UpdateService.GitHubRepo}/releases/latest/download/Keep-Alive-Setup-1.0.5.exe";
+            }
+
+            lblUpdateStatus.Text = "⏳ Downloading setup installer and preparing auto-update...";
+            bool success = await UpdateService.DownloadAndApplyUpdateAsync(url, msg =>
+            {
+                lblUpdateStatus.Text = msg;
+            });
+
+            btnDownloadReplace.Enabled = true;
+            if (!success)
+            {
+                MessageBox.Show("Could not auto-download update setup file. Opening release page in browser.", "Update Download", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                UpdateService.LaunchUpdate(info.HtmlUrl);
+            }
+        };
+
+        btnPairInSettings.Click += (_, _) =>
+        {
+            bool ok = BluetoothManagerService.TriggerAutoRePairAndConnect(_settings.PreferredDeviceName);
+            MessageBox.Show(ok ? "Auto-pair and Bluetooth connection request sent to Windows." : "Failed to trigger auto-pair.", "Bluetooth Re-Pair", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        };
+
+        cardUpdates.Controls.Add(lblUpdateHead);
+        cardUpdates.Controls.Add(lblUpdateInfo);
+        cardUpdates.Controls.Add(lblUpdateStatus);
+        cardUpdates.Controls.Add(btnCheckInSettings);
+        cardUpdates.Controls.Add(btnDownloadReplace);
+        cardUpdates.Controls.Add(btnPairInSettings);
+
+        pnl.Controls.Add(cardUpdates);
         _contentContainer.Controls.Add(pnl);
     }
 

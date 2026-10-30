@@ -20,7 +20,7 @@ public static class UpdateService
     public const string GitHubRepo = "tausif-rahaman-raiyan/Bluetooth-KeepAlive";
     private static readonly HttpClient _httpClient = new()
     {
-        Timeout = TimeSpan.FromSeconds(8)
+        Timeout = TimeSpan.FromSeconds(15)
     };
 
     static UpdateService()
@@ -30,7 +30,7 @@ public static class UpdateService
     }
 
     /// <summary>
-    /// Checks GitHub Releases for the latest version and changelog.
+    /// Checks GitHub Releases for the latest version and setup installer URL.
     /// </summary>
     public static async Task<UpdateInfo> CheckForUpdatesAsync()
     {
@@ -108,6 +108,54 @@ public static class UpdateService
                 DateTime.UtcNow.ToString("yyyy-MM-dd"),
                 null, $"https://github.com/{GitHubRepo}/releases"
             );
+        }
+    }
+
+    /// <summary>
+    /// Downloads the latest Setup EXE to temp directory, launches installer, and exits app to replace build.
+    /// </summary>
+    public static async Task<bool> DownloadAndApplyUpdateAsync(string setupUrl, Action<string>? progressCallback = null)
+    {
+        try
+        {
+            progressCallback?.Invoke("Downloading setup installer from GitHub...");
+            string tempDir = Path.GetTempPath();
+            string tempExe = Path.Combine(tempDir, $"Keep-Alive-Setup-Update-{Guid.NewGuid():N}.exe");
+
+            using (var downloadStream = await _httpClient.GetStreamAsync(setupUrl))
+            using (var fileStream = new FileStream(tempExe, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                await downloadStream.CopyToAsync(fileStream);
+            }
+
+            if (!File.Exists(tempExe) || new FileInfo(tempExe).Length < 100000)
+            {
+                throw new InvalidOperationException("Downloaded setup installer file is invalid or incomplete.");
+            }
+
+            progressCallback?.Invoke("Launching Setup Installer & closing application...");
+            LogService.Log(LogSeverity.Info, "UpdateService", $"Launching setup installer: {tempExe}");
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = tempExe,
+                UseShellExecute = true
+            });
+
+            // Gracefully close application so setup installer can replace executable
+            Task.Run(async () =>
+            {
+                await Task.Delay(1000);
+                Environment.Exit(0);
+            });
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            LogService.Log(LogSeverity.Error, "UpdateService", "Failed to download/apply update.", ex.ToString());
+            progressCallback?.Invoke($"Update failed: {ex.Message}");
+            return false;
         }
     }
 
