@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Reflection;
 using System.Text.Json;
 
 namespace HocoKeepAlive.Diagnostics;
@@ -16,7 +17,23 @@ public sealed record UpdateInfo(
 
 public static class UpdateService
 {
-    public const string CurrentVersion = "1.0.4";
+    public static string CurrentVersion
+    {
+        get
+        {
+            try
+            {
+                var ver = Assembly.GetExecutingAssembly().GetName().Version;
+                if (ver != null && ver.Major > 0)
+                {
+                    return $"{ver.Major}.{ver.Minor}.{ver.Build}";
+                }
+            }
+            catch { }
+            return "1.0.5";
+        }
+    }
+
     public const string GitHubRepo = "tausif-rahaman-raiyan/Bluetooth-KeepAlive";
     private static readonly HttpClient _httpClient = new()
     {
@@ -25,7 +42,7 @@ public static class UpdateService
 
     static UpdateService()
     {
-        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("KeepAlive-Updater/1.0.4");
+        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"KeepAlive-Updater/{CurrentVersion}");
         _httpClient.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github.v3+json");
     }
 
@@ -143,7 +160,7 @@ public static class UpdateService
             });
 
             // Gracefully close application so setup installer can replace executable
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 await Task.Delay(1000);
                 Environment.Exit(0);

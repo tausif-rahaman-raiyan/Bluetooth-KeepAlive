@@ -50,7 +50,6 @@ public sealed class MainForm : Form
     private Label? _lblSpeakerBatteryVal;
     private Label? _lblLaptopBatteryVal;
     private Label? _lblWaveContext;
-    private Button? _btnOverviewToggle;
 
     public MainForm(AudioKeepAliveService audioService, AppSettings settings, Icon appIcon, Action onExit)
     {
@@ -1495,13 +1494,6 @@ public sealed class MainForm : Form
         {
             _btnTopQuickToggle.Text = isRunning ? "Stop Stream" : "Start Stream";
             _btnTopQuickToggle.BackColor = isRunning ? AccentCrimson : SurfaceHover;
-        }
-
-        if (_btnOverviewToggle != null)
-        {
-            _btnOverviewToggle.Text = isRunning ? "Stop Keep-Alive" : "Start Keep-Alive";
-            _btnOverviewToggle.BackColor = isRunning ? SurfaceHover : AccentCrimson;
-            _btnOverviewToggle.ForeColor = isRunning ? AccentCrimsonGlow : Color.White;
         }
 
         if (_lblSpeakerBatteryVal != null)
