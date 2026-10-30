@@ -6,9 +6,9 @@ public sealed class WaveformVisualizer : Control
 {
     private readonly System.Windows.Forms.Timer _animTimer;
     private float _phase;
-    private bool _isActive;
+    private bool _isActive = true;
     private bool _isCallStandby;
-    private string _audioContextText = "Bluetooth Wireless Speaker · Low-Overhead Silent Stream (48,000 Hz)";
+    private string _deviceName = "Wireless Bluetooth Speaker";
 
     public bool IsActive
     {
@@ -36,12 +36,12 @@ public sealed class WaveformVisualizer : Control
         }
     }
 
-    public string AudioContextText
+    public string DeviceName
     {
-        get => _audioContextText;
+        get => _deviceName;
         set
         {
-            _audioContextText = value;
+            _deviceName = value;
             Invalidate();
         }
     }
@@ -54,15 +54,15 @@ public sealed class WaveformVisualizer : Control
                  ControlStyles.ResizeRedraw, true);
 
         DoubleBuffered = true;
-        BackColor = Color.FromArgb(12, 13, 18); // #0C0D12 deep obsidian
+        BackColor = Color.FromArgb(11, 12, 16); // #0B0C10 deep dark inset
 
-        _animTimer = new System.Windows.Forms.Timer { Interval = 33 }; // ~30 FPS
+        _animTimer = new System.Windows.Forms.Timer { Interval = 25 }; // 40 FPS smooth canvas loop
         _animTimer.Tick += (_, _) =>
         {
-            _phase += 0.055f;
-            if (_phase > MathF.PI * 4f)
+            _phase += _isActive ? 0.035f : 0.012f;
+            if (_phase > MathF.PI * 8f)
             {
-                _phase -= MathF.PI * 4f;
+                _phase -= MathF.PI * 8f;
             }
             Invalidate();
         };
@@ -90,35 +90,34 @@ public sealed class WaveformVisualizer : Control
         int h = ClientSize.Height;
         if (w <= 10 || h <= 10) return;
 
-        // Dark rounded canvas background
-        using var bgBrush = new SolidBrush(Color.FromArgb(14, 15, 22));
-        using var borderPen = new Pen(Color.FromArgb(32, 35, 48), 1f);
+        // Dark rounded canvas background (#0B0C10)
+        using var bgBrush = new SolidBrush(Color.FromArgb(11, 12, 16));
+        using var borderPen = new Pen(Color.FromArgb(34, 36, 50), 1f);
         using var path = CreateRoundedRectanglePath(new Rectangle(0, 0, w - 1, h - 1), 12);
         g.FillPath(bgBrush, path);
         g.DrawPath(borderPen, path);
 
         float midY = h * 0.52f;
 
-        // Subtle center guideline
-        using (var guidePen = new Pen(Color.FromArgb(24, 28, 40), 1f) { DashStyle = DashStyle.Dash })
+        // Subtle horizontal center grid line
+        using (var guidePen = new Pen(Color.FromArgb(29, 30, 40), 1f) { DashStyle = DashStyle.Dash })
         {
-            g.DrawLine(guidePen, 24, midY, w - 24, midY);
+            g.DrawLine(guidePen, 20, midY, w - 20, midY);
         }
 
         if (_isCallStandby)
         {
-            // WhatsApp Call Mode: Gentle amber/rose pulsing wave with clear indicator
+            // WhatsApp Call Standby Wave
             float pulse = (MathF.Sin(_phase * 2f) + 1f) * 0.5f;
-            int waveAlpha = (int)(90 + pulse * 110);
+            int waveAlpha = (int)(100 + pulse * 120);
 
             using var callGlowPen = new Pen(Color.FromArgb(waveAlpha / 3, 239, 68, 68), 6f);
             using var callPen = new Pen(Color.FromArgb(waveAlpha, 251, 146, 60), 2.5f);
             DrawSinWave(g, callGlowPen, w, midY, 18f, 0.015f, _phase);
             DrawSinWave(g, callPen, w, midY, 18f, 0.015f, _phase);
 
-            // Center Call Indicator Badge
             string callMsg = "● WHATSAPP VIDEO CALL ACTIVE · MICROPHONE FREED FOR TALKING";
-            using var font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            using var font = new Font("Segoe UI", 8.8F, FontStyle.Bold);
             var sz = g.MeasureString(callMsg, font);
             var pillRect = new RectangleF((w - sz.Width - 28) / 2f, midY - 14, sz.Width + 28, 28);
 
@@ -133,68 +132,56 @@ public sealed class WaveformVisualizer : Control
             return;
         }
 
-        if (!_isActive)
-        {
-            // Resting idle state: calm gentle ribbon wave
-            using var idleGlowPen = new Pen(Color.FromArgb(30, 201, 213, 255), 4f);
-            using var idlePen = new Pen(Color.FromArgb(70, 160, 175, 210), 1.8f);
-            DrawSinWave(g, idleGlowPen, w, midY, 8f, 0.012f, _phase * 0.4f);
-            DrawSinWave(g, idlePen, w, midY, 8f, 0.012f, _phase * 0.4f);
+        // Base amplitude
+        float baseAmp = _isActive ? Math.Clamp(h * 0.28f, 22f, 48f) : 10f;
 
-            // Center Idle Text
-            string idleMsg = "SILENT KEEP-ALIVE IDLE · CLICK START TO MAINTAIN BLUETOOTH SPEAKER CONNECTION";
-            using var font = new Font("Segoe UI", 8.5F, FontStyle.Regular);
-            var sz = g.MeasureString(idleMsg, font);
-            using var textBrush = new SolidBrush(Color.FromArgb(120, 130, 155));
-            g.DrawString(idleMsg, font, textBrush, (w - sz.Width) / 2f, midY - sz.Height / 2f);
-            return;
+        // Draw 4 distinct flowing multi-layered sinusoidal ribbon waves (Exact match to React Canvas)
+        // Ribbon 1: Crimson Base Atmosphere Glow
+        Color color1 = _isActive ? Color.FromArgb(60, 255, 46, 99) : Color.FromArgb(30, 16, 185, 129);
+        using (var pen1 = new Pen(color1, 7f))
+        {
+            DrawCompoundSinWave(g, pen1, w, midY, baseAmp * 1.15f, 0.005f, 0.012f, 1.0f, _phase, 0);
         }
 
-        // Active Keep-Alive State: Multi-layered glowing sinusoidal ribbon waves
-        // Directly inspired by the reference image's glowing red/crimson/lavender ribbon streams!
-        float baseAmp = Math.Clamp(h * 0.28f, 24f, 52f);
-
-        // 1. Wide Crimson Atmosphere Glow
-        using (var penGlow = new Pen(Color.FromArgb(35, 230, 57, 86), 8f))
+        // Ribbon 2: Secondary Vivid Pink Wave
+        Color color2 = _isActive ? Color.FromArgb(160, 255, 75, 114) : Color.FromArgb(100, 16, 185, 129);
+        using (var pen2 = new Pen(color2, 4f))
         {
-            DrawCompoundSinWave(g, penGlow, w, midY, baseAmp * 1.1f, 0.014f, 0.024f, _phase);
+            DrawCompoundSinWave(g, pen2, w, midY, baseAmp * 0.95f, 0.007f, 0.015f, 1.25f, _phase, 1);
         }
 
-        // 2. Secondary Harmonic Wave (Soft Lavender / Coral)
-        using (var penHarmonic = new Pen(Color.FromArgb(130, 201, 213, 255), 2.2f))
+        // Ribbon 3: Deep Coral / Rose Wave
+        Color color3 = _isActive ? Color.FromArgb(210, 230, 57, 86) : Color.FromArgb(160, 52, 211, 153);
+        using (var pen3 = new Pen(color3, 3f))
         {
-            DrawCompoundSinWave(g, penHarmonic, w, midY, baseAmp * 0.75f, 0.019f, 0.031f, _phase * 1.25f + 1.2f);
+            DrawCompoundSinWave(g, pen3, w, midY, baseAmp * 0.8f, 0.006f, 0.018f, 0.85f, _phase, 2);
         }
 
-        // 3. Deep Coral Wave
-        using (var penCoral = new Pen(Color.FromArgb(180, 255, 95, 125), 2.8f))
+        // Ribbon 4: Top Focal Bright Pink Ribbon
+        Color color4 = _isActive ? Color.FromArgb(245, 255, 130, 160) : Color.FromArgb(220, 110, 231, 183);
+        using (var pen4 = new Pen(color4, 2.2f))
         {
-            DrawCompoundSinWave(g, penCoral, w, midY, baseAmp * 0.95f, 0.015f, 0.027f, _phase * 0.9f + 2.4f);
+            DrawCompoundSinWave(g, pen4, w, midY, baseAmp * 0.65f, 0.009f, 0.022f, 1.4f, _phase, 3);
         }
 
-        // 4. Primary Vivid Glowing Crimson Ribbon (Top focal wave)
-        using (var penCrimson = new Pen(Color.FromArgb(235, 255, 65, 105), 3.4f))
-        {
-            DrawCompoundSinWave(g, penCrimson, w, midY, baseAmp, 0.016f, 0.028f, _phase);
-        }
-
-        // Top Left Status Indicator
+        // Overlay Badge Top Left
         using var statusFont = new Font("Segoe UI", 8F, FontStyle.Bold);
-        using var statusBrush = new SolidBrush(Color.FromArgb(160, 255, 120, 140));
-        g.DrawString("● 48 kHz CONTINUOUS STREAM", statusFont, statusBrush, 18, 14);
+        using var statusBrush = new SolidBrush(_isActive ? Color.FromArgb(240, 255, 75, 114) : Color.FromArgb(240, 16, 185, 129));
+        string statusText = _isActive ? "● 48,000 HZ STEREO KEEP-ALIVE" : "● BACKGROUND ANTI-DISCONNECT ACTIVE";
+        g.DrawString(statusText, statusFont, statusBrush, 16, 12);
 
-        // Top Right Telemetry
+        // Overlay Info Top Right
         using var rightFont = new Font("Segoe UI", 8F);
-        using var rightBrush = new SolidBrush(Color.FromArgb(140, 150, 175));
-        string rightText = "NAudio Low-Overhead Callback · 0% CPU";
+        using var rightBrush = new SolidBrush(Color.FromArgb(142, 149, 165));
+        string rightText = _deviceName + " • Anti-Sleep 1-LSB Dither Enabled";
         var rSize = g.MeasureString(rightText, rightFont);
-        g.DrawString(rightText, rightFont, rightBrush, w - rSize.Width - 18, 14);
+        g.DrawString(rightText, rightFont, rightBrush, w - rSize.Width - 16, 12);
     }
 
     private static void DrawSinWave(Graphics g, Pen pen, int width, float midY, float amp, float freq, float phase)
     {
         var points = new List<PointF>(width / 4 + 2);
-        for (int x = 12; x <= width - 12; x += 4)
+        for (int x = 16; x <= width - 16; x += 4)
         {
             float y = midY + MathF.Sin(x * freq + phase) * amp;
             points.Add(new PointF(x, y));
@@ -206,13 +193,13 @@ public sealed class WaveformVisualizer : Control
         }
     }
 
-    private static void DrawCompoundSinWave(Graphics g, Pen pen, int width, float midY, float amp, float freq1, float freq2, float phase)
+    private static void DrawCompoundSinWave(Graphics g, Pen pen, int width, float midY, float amp, float freq1, float freq2, float speed, float phase, int idx)
     {
         var points = new List<PointF>(width / 4 + 2);
-        for (int x = 12; x <= width - 12; x += 4)
+        for (int x = 16; x <= width - 16; x += 4)
         {
-            // Superposition of two sine waves gives the elegant organic ribbon look
-            float y = midY + (MathF.Sin(x * freq1 + phase) * 0.7f + MathF.Sin(x * freq2 - phase * 0.7f) * 0.3f) * amp;
+            float normX = x;
+            float y = midY + (MathF.Sin(normX * freq1 + phase * speed + idx) * 0.65f + MathF.Sin(normX * freq2 - phase * speed * 0.8f + idx * 2) * 0.35f) * amp;
             points.Add(new PointF(x, y));
         }
 

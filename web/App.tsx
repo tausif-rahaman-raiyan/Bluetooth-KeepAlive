@@ -19,15 +19,14 @@ import {
   Download,
   Laptop
 } from 'lucide-react';
-
-interface AudioEndpoint {
-  id: string;
-  name: string;
-  category: string;
-  volume: number;
-  status: 'active' | 'standby' | 'idle';
-  isBluetooth?: boolean;
-}
+import {
+  isHosted,
+  sendToHost,
+  onHostMessage,
+  HostMessage,
+  HostDevice,
+  formatDuration
+} from './host';
 
 interface GitHubRelease {
   tag_name: string;
@@ -42,22 +41,33 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'controls' | 'devices' | 'settings'>('dashboard');
   const [isRunning, setIsRunning] = useState<boolean>(true);
   const [keepActiveWhenPaused, setKeepActiveWhenPaused] = useState<boolean>(true);
+  const [appVersion, setAppVersion] = useState<string>('v1.0.4');
+  const [sessionSeconds, setSessionSeconds] = useState<number>(0);
   
   // Separate laptop battery vs speaker battery
   const [laptopBatteryLevel, setLaptopBatteryLevel] = useState<number>(90);
   const [isLaptopCharging, setIsLaptopCharging] = useState<boolean>(false);
   const [speakerBatteryLevel, setSpeakerBatteryLevel] = useState<number>(85);
   const [isSpeakerConnected, setIsSpeakerConnected] = useState<boolean>(true);
+  const [speakerStatusText, setSpeakerStatusText] = useState<string>('Connected via Bluetooth GATT / HFP');
   
   const [selectedDevice, setSelectedDevice] = useState<string>('Wireless Bluetooth Speaker');
+  const [selectedDeviceNumber, setSelectedDeviceNumber] = useState<number>(-1);
+  const [hostDevices, setHostDevices] = useState<HostDevice[]>([]);
+
   const [autoRePairActive, setAutoRePairActive] = useState<boolean>(true);
   const [callProtectionActive, setCallProtectionActive] = useState<boolean>(true);
+  const [autoPauseOnOtherAudio, setAutoPauseOnOtherAudio] = useState<boolean>(false);
+  const [startOnStartup, setStartOnStartup] = useState<boolean>(true);
+  const [minimizeToTray, setMinimizeToTray] = useState<boolean>(true);
+  const [showNotifications, setShowNotifications] = useState<boolean>(true);
+
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   
-  // Update state from GitHub repo
+  // Update state from GitHub repo / Host UpdateService
   const [checkingUpdate, setCheckingUpdate] = useState<boolean>(false);
   const [latestRelease, setLatestRelease] = useState<GitHubRelease | null>(null);
-  const [updateStatus, setUpdateStatus] = useState<string>('Running Keep Alive v1.0.4 (Latest)');
+  const [updateStatus, setUpdateStatus] = useState<string>('Checking release status...');
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
   // Avatar load status
@@ -73,9 +83,81 @@ export default function App() {
     }, 3800);
   };
 
-  // Query host PC battery
+  // Host Message Bridge
   useEffect(() => {
-    if ('getBattery' in navigator) {
+    if (isHosted) {
+      sendToHost({ type: 'ready' });
+    }
+
+    const unsubscribe = onHostMessage((msg: HostMessage) => {
+      if (msg.type === 'state') {
+        if (msg.version) setAppVersion(msg.version.startsWith('v') ? msg.version : `v${msg.version}`);
+        setIsRunning(msg.isRunning);
+        setSessionSeconds(msg.runningSeconds || 0);
+        if (msg.deviceName) setSelectedDevice(msg.deviceName);
+        if (msg.deviceNumber !== undefined) setSelectedDeviceNumber(msg.deviceNumber);
+        if (msg.devices) setHostDevices(msg.devices);
+
+        if (msg.speaker) {
+          if (msg.speaker.name) setSelectedDevice(msg.speaker.name);
+          setIsSpeakerConnected(msg.speaker.connected);
+          if (msg.speaker.battery !== null && msg.speaker.battery !== undefined) {
+            setSpeakerBatteryLevel(msg.speaker.battery);
+          }
+          if (msg.speaker.status) setSpeakerStatusText(msg.speaker.status);
+        }
+
+        if (msg.laptop) {
+          setLaptopBatteryLevel(msg.laptop.level);
+          setIsLaptopCharging(msg.laptop.charging);
+        }
+
+        if (msg.settings) {
+          setKeepActiveWhenPaused(msg.settings.alwaysKeepStreamActive);
+          setAutoRePairActive(msg.settings.autoReconnect);
+          setCallProtectionActive(msg.settings.callProtection);
+          setAutoPauseOnOtherAudio(msg.settings.autoPauseOnOtherAudio);
+          setStartOnStartup(msg.settings.startOnWindowsStartup);
+          setMinimizeToTray(msg.settings.minimizeToTrayOnClose);
+          setShowNotifications(msg.settings.showNotifications);
+        }
+      } else if (msg.type === 'toast') {
+        showToast(msg.message);
+      } else if (msg.type === 'navigate') {
+        setActiveTab(msg.tab);
+      } else if (msg.type === 'update') {
+        setCheckingUpdate(false);
+        if (msg.isUpdateAvailable) {
+          setUpdateStatus(`New Version Available: v${msg.latestVersion}`);
+          setLatestRelease({
+            tag_name: msg.latestVersion.startsWith('v') ? msg.latestVersion : `v${msg.latestVersion}`,
+            name: msg.releaseName || `Keep Alive v${msg.latestVersion}`,
+            body: msg.releaseNotes || 'Bug fixes, auto re-pairing, and continuous keep-alive stability updates.',
+            published_at: msg.publishedAt || new Date().toISOString(),
+            html_url: msg.htmlUrl || 'https://github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive/releases/latest',
+            assets: msg.setupUrl
+              ? [
+                  {
+                    name: `Keep-Alive-Setup-${msg.latestVersion.replace(/^v/, '')}.exe`,
+                    browser_download_url: msg.setupUrl,
+                    size: 8500000
+                  }
+                ]
+              : []
+          });
+          showToast(`Update available: v${msg.latestVersion}`);
+        } else {
+          setUpdateStatus(`App is fully up to date (${msg.currentVersion.startsWith('v') ? msg.currentVersion : `v${msg.currentVersion}`})`);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Web query for host battery if running in web browser preview
+  useEffect(() => {
+    if (!isHosted && 'getBattery' in navigator) {
       (navigator as unknown as { getBattery: () => Promise<{ level: number; charging: boolean }> })
         .getBattery()
         .then((bat) => {
@@ -86,9 +168,9 @@ export default function App() {
     }
   }, []);
 
-  // Auto Re-Pair watchdog loop simulation
+  // Auto Re-Pair watchdog loop simulation for web preview
   useEffect(() => {
-    if (!autoRePairActive) return;
+    if (isHosted || !autoRePairActive) return;
 
     const interval = setInterval(() => {
       if (!isSpeakerConnected) {
@@ -103,10 +185,14 @@ export default function App() {
     return () => clearInterval(interval);
   }, [autoRePairActive, isSpeakerConnected, selectedDevice]);
 
-  // Check for updates from GitHub repo tausif-rahaman-raiyan/Bluetooth-KeepAlive
+  // Check for updates from GitHub repo
   const checkForUpdates = (openModalOnComplete = true) => {
     setCheckingUpdate(true);
-    setUpdateStatus('Contacting GitHub API for latest releases...');
+    setUpdateStatus('Checking GitHub repository for updates...');
+
+    if (isHosted) {
+      sendToHost({ type: 'checkUpdate' });
+    }
 
     fetch('https://api.github.com/repos/tausif-rahaman-raiyan/Bluetooth-KeepAlive/releases/latest')
       .then((res) => {
@@ -117,24 +203,24 @@ export default function App() {
         setCheckingUpdate(false);
         if (data.tag_name) {
           setLatestRelease(data);
-          const isNewer = data.tag_name !== 'v1.0.4' && data.tag_name !== '1.0.4';
+          const isNewer = data.tag_name !== appVersion && data.tag_name !== appVersion.replace(/^v/, '');
           if (isNewer) {
             setUpdateStatus(`New Version Available: ${data.tag_name}`);
             showToast(`Update available! ${data.tag_name} is ready on GitHub.`);
           } else {
-            setUpdateStatus(`App is fully up to date (${data.tag_name})`);
+            setUpdateStatus(`App is fully up to date (${appVersion})`);
           }
           if (openModalOnComplete) setShowUpdateModal(true);
         } else {
-          setUpdateStatus('App is up to date (v1.0.4)');
+          setUpdateStatus(`App is up to date (${appVersion})`);
         }
       })
       .catch(() => {
         setCheckingUpdate(false);
-        setUpdateStatus('Checked repo: Running build v1.0.4 (Up to date)');
+        setUpdateStatus(`Checked repo: Running build ${appVersion} (Up to date)`);
         if (openModalOnComplete) {
           setLatestRelease({
-            tag_name: 'v1.0.5-release',
+            tag_name: 'v1.0.5',
             name: 'Keep Alive v1.0.5 - Windows Setup & Auto Re-Pair Update',
             published_at: new Date().toISOString(),
             html_url: 'https://github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive/releases/latest',
@@ -313,6 +399,11 @@ export default function App() {
   }, [isRunning, keepActiveWhenPaused, activeTab]);
 
   const toggleKeepAlive = () => {
+    if (isHosted) {
+      sendToHost({ type: 'toggle' });
+      return;
+    }
+
     if (isRunning) {
       setIsRunning(false);
       if (keepActiveWhenPaused) {
@@ -326,19 +417,60 @@ export default function App() {
     }
   };
 
-  const endpoints: AudioEndpoint[] = [
-    {
-      id: '1',
-      name: selectedDevice,
-      category: 'Bluetooth Audio Soundbox · Connected',
-      volume: 100,
-      status: isSpeakerConnected ? 'active' : 'idle',
-      isBluetooth: true
-    },
-    { id: '2', name: 'WhatsApp Voice & Video Call', category: 'Microphone Watchdog', volume: 85, status: 'standby' },
-    { id: '3', name: 'Spotify / YouTube Music', category: 'Media Application Mapper', volume: 65, status: 'idle' },
-    { id: '4', name: 'Windows System Sounds', category: 'Primary Endpoint Mapper', volume: 40, status: 'idle' }
-  ];
+  const handleSettingChange = (key: string, val: boolean, setter: (v: boolean) => void) => {
+    setter(val);
+    if (isHosted) {
+      sendToHost({ type: 'setSetting', key, value: val });
+    }
+  };
+
+  const handleSelectDevice = (devNumber: number, devName: string) => {
+    setSelectedDevice(devName);
+    setSelectedDeviceNumber(devNumber);
+    if (isHosted) {
+      sendToHost({ type: 'selectDevice', number: devNumber, name: devName });
+    } else {
+      showToast(`Switched active keep-alive output to ${devName}`);
+    }
+  };
+
+  const triggerRepair = () => {
+    if (isHosted) {
+      sendToHost({ type: 'repair' });
+      return;
+    }
+    showToast(`Re-pairing ${selectedDevice}...`);
+    setTimeout(() => {
+      setIsSpeakerConnected(true);
+      setSpeakerBatteryLevel(85);
+      showToast(`Successfully re-paired ${selectedDevice}`);
+    }, 1200);
+  };
+
+  const endpoints = hostDevices.length > 0
+    ? hostDevices.map((d) => ({
+        id: d.number.toString(),
+        name: d.name,
+        category: d.isBluetooth ? 'Bluetooth Audio Device' : 'Windows Audio Endpoint',
+        volume: 100,
+        status: d.name === selectedDevice ? ('active' as const) : ('idle' as const),
+        isBluetooth: d.isBluetooth,
+        number: d.number
+      }))
+    : [
+        {
+          id: '1',
+          name: selectedDevice,
+          category: 'Bluetooth Audio Soundbox · Connected',
+          volume: 100,
+          status: isSpeakerConnected ? ('active' as const) : ('idle' as const),
+          isBluetooth: true,
+          number: selectedDeviceNumber
+        },
+        { id: '2', name: 'WhatsApp Voice & Video Call', category: 'Microphone Watchdog', volume: 85, status: 'standby' as const, isBluetooth: false, number: -1 },
+        { id: '3', name: 'Spotify / YouTube Music', category: 'Media Application Mapper', volume: 65, status: 'idle' as const, isBluetooth: false, number: -1 },
+        { id: '4', name: 'Windows System Sounds', category: 'Primary Endpoint Mapper', volume: 40, status: 'idle' as const, isBluetooth: false, number: -1 }
+      ];
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#0B0C10] text-[#F3F4F8] select-none font-sans relative">
@@ -395,19 +527,23 @@ export default function App() {
                 <div className="space-y-2 pt-2">
                   <p className="text-xs font-bold text-white">Download Setup EXE Package:</p>
                   {latestRelease.assets.map((asset) => (
-                    <a
+                    <button
                       key={asset.name}
-                      href={asset.browser_download_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center justify-between p-3 rounded-xl bg-[#FF2E63] hover:bg-[#FF3B69] text-white font-bold text-xs transition-colors group"
+                      onClick={() => {
+                        if (isHosted) {
+                          sendToHost({ type: 'applyUpdate', url: asset.browser_download_url });
+                        } else {
+                          window.open(asset.browser_download_url, '_blank');
+                        }
+                      }}
+                      className="w-full flex items-center justify-between p-3 rounded-xl bg-[#FF2E63] hover:bg-[#FF3B69] text-white font-bold text-xs transition-colors group cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
                         <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
                         <span>{asset.name}</span>
                       </div>
                       <span className="text-[11px] opacity-90">{Math.round(asset.size / (1024 * 1024))} MB</span>
-                    </a>
+                    </button>
                   ))}
                 </div>
               )}
@@ -561,13 +697,13 @@ export default function App() {
           <div className="text-xs text-[#6F768A] flex items-center gap-2">
             <span className="font-semibold text-white">Bluetooth KeepAlive</span>
             <span>/</span>
-            <span className="text-[#8E95A5]">Professional Audio Suite · v1.0.4</span>
+            <span className="text-[#8E95A5]">Professional Audio Suite · {appVersion}</span>
             {latestRelease && (
               <span
                 onClick={() => setShowUpdateModal(true)}
                 className="ml-2 px-2 py-0.5 rounded-full bg-[#FF2E63]/20 border border-[#FF3B69]/40 text-[#FF4B72] text-[10px] font-bold cursor-pointer hover:bg-[#FF2E63]/30 transition-colors"
               >
-                v1.0.5 Update Available
+                {latestRelease.tag_name} Update Available
               </span>
             )}
           </div>
@@ -622,7 +758,7 @@ export default function App() {
                       <p className="text-3xl font-extrabold text-white tracking-tight">{speakerBatteryLevel}%</p>
                       <span className="text-[11px] font-mono text-[#FF4B72] font-semibold">{selectedDevice}</span>
                     </div>
-                    <p className="text-xs text-[#7F869A] font-medium mt-1">Bluetooth Speaker Battery Level (HFP / GATT)</p>
+                    <p className="text-xs text-[#7F869A] font-medium mt-1">{speakerStatusText}</p>
                     <div className="w-full h-1.5 bg-[#252733] rounded-full mt-3 overflow-hidden">
                       <div
                         className="h-full rounded-full bg-[#FF3B69] transition-all duration-500 shadow-[0_0_8px_#FF3B69]"
@@ -667,7 +803,9 @@ export default function App() {
                     <div className="flex items-center gap-2 mt-1">
                       <span className={`w-2 h-2 rounded-full ${isRunning ? 'bg-[#FF3B69] animate-pulse' : 'bg-[#10B981]'}`} />
                       <span className="text-[13px] font-semibold text-white">{selectedDevice}</span>
-                      <span className="text-xs text-[#7F869A]">• {isRunning ? 'Active Main PCM Stream' : 'Background Anti-Disconnect Dither Stream'}</span>
+                      <span className="text-xs text-[#7F869A]">
+                        • {isRunning ? `Active Main PCM Stream (${formatDuration(sessionSeconds)})` : 'Background Anti-Disconnect Dither Stream'}
+                      </span>
                     </div>
                   </div>
 
@@ -709,10 +847,9 @@ export default function App() {
                       type="checkbox"
                       id="alwaysAlive"
                       checked={keepActiveWhenPaused}
-                      onChange={(e) => {
-                        setKeepActiveWhenPaused(e.target.checked);
-                        showToast(e.target.checked ? 'Enabled Continuous Background Silent Stream' : 'Disabled background stream');
-                      }}
+                      onChange={(e) =>
+                        handleSettingChange('alwaysKeepStreamActive', e.target.checked, setKeepActiveWhenPaused)
+                      }
                       className="w-4 h-4 accent-[#FF3B69] cursor-pointer"
                     />
                     <label htmlFor="alwaysAlive" className="text-xs text-white font-semibold cursor-pointer">
@@ -728,12 +865,28 @@ export default function App() {
 
               {/* Endpoints List */}
               <div className="space-y-3">
-                <h3 className="text-[16px] font-bold text-white">Monitored Sound Endpoints &amp; Bluetooth Devices</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-[16px] font-bold text-white">Monitored Sound Endpoints &amp; Bluetooth Devices</h3>
+                  {isHosted && (
+                    <button
+                      onClick={() => sendToHost({ type: 'refreshDevices' })}
+                      className="text-xs text-[#7F869A] hover:text-white flex items-center gap-1 cursor-pointer"
+                    >
+                      <RefreshCw className="w-3 h-3" /> Refresh Devices
+                    </button>
+                  )}
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                   {endpoints.map((ep) => (
                     <div
                       key={ep.id}
-                      className="bg-[#171820] border border-[#252733] rounded-xl p-4 flex items-center justify-between hover:border-[#FF3B69]/30 transition-all"
+                      onClick={() => handleSelectDevice(ep.number, ep.name)}
+                      className={`bg-[#171820] border rounded-xl p-4 flex items-center justify-between cursor-pointer transition-all ${
+                        ep.name === selectedDevice
+                          ? 'border-[#FF3B69]/60 bg-[#22131C]'
+                          : 'border-[#252733] hover:border-[#FF3B69]/30'
+                      }`}
                     >
                       <div className="flex items-center gap-3.5 min-w-0">
                         <div
@@ -751,12 +904,14 @@ export default function App() {
 
                       <span
                         className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                          ep.status === 'active'
+                          ep.name === selectedDevice
+                            ? 'bg-[#FF3B69]/20 text-[#FF4B72]'
+                            : ep.status === 'active'
                             ? 'bg-[#10B981]/15 text-[#10B981]'
                             : 'bg-[#252733] text-[#7F869A]'
                         }`}
                       >
-                        {ep.status === 'active' ? 'Active' : 'Standby'}
+                        {ep.name === selectedDevice ? 'Active Target' : ep.status === 'active' ? 'Active' : 'Select'}
                       </span>
                     </div>
                   ))}
@@ -782,10 +937,9 @@ export default function App() {
                   <input
                     type="checkbox"
                     checked={autoRePairActive}
-                    onChange={(e) => {
-                      setAutoRePairActive(e.target.checked);
-                      showToast(e.target.checked ? 'Auto Re-Pair Watchdog Enabled' : 'Auto Re-Pair Disabled');
-                    }}
+                    onChange={(e) =>
+                      handleSettingChange('autoReconnect', e.target.checked, setAutoRePairActive)
+                    }
                     className="w-5 h-5 accent-[#FF3B69] cursor-pointer"
                   />
                 </div>
@@ -798,7 +952,9 @@ export default function App() {
                   <input
                     type="checkbox"
                     checked={keepActiveWhenPaused}
-                    onChange={(e) => setKeepActiveWhenPaused(e.target.checked)}
+                    onChange={(e) =>
+                      handleSettingChange('alwaysKeepStreamActive', e.target.checked, setKeepActiveWhenPaused)
+                    }
                     className="w-5 h-5 accent-[#FF3B69] cursor-pointer"
                   />
                 </div>
@@ -811,7 +967,24 @@ export default function App() {
                   <input
                     type="checkbox"
                     checked={callProtectionActive}
-                    onChange={(e) => setCallProtectionActive(e.target.checked)}
+                    onChange={(e) =>
+                      handleSettingChange('callProtection', e.target.checked, setCallProtectionActive)
+                    }
+                    className="w-5 h-5 accent-[#FF3B69] cursor-pointer"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between p-4 rounded-xl bg-[#0B0C10] border border-[#222432]">
+                  <div>
+                    <p className="text-sm font-bold text-white">Auto Pause Keep-Alive On Other Audio Playback</p>
+                    <p className="text-xs text-[#7F869A] mt-0.5">Pauses background keep-alive tone when active media (YouTube, Spotify) is playing</p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={autoPauseOnOtherAudio}
+                    onChange={(e) =>
+                      handleSettingChange('autoPauseOnOtherAudio', e.target.checked, setAutoPauseOnOtherAudio)
+                    }
                     className="w-5 h-5 accent-[#FF3B69] cursor-pointer"
                   />
                 </div>
@@ -820,14 +993,7 @@ export default function App() {
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-bold text-white">Force Re-Pair &amp; Connect Target Speaker</p>
                     <button
-                      onClick={() => {
-                        showToast(`Re-pairing ${selectedDevice}...`);
-                        setTimeout(() => {
-                          setIsSpeakerConnected(true);
-                          setSpeakerBatteryLevel(85);
-                          showToast(`Successfully re-paired ${selectedDevice}`);
-                        }, 1200);
-                      }}
+                      onClick={triggerRepair}
                       className="px-4 py-2 rounded-xl bg-[#FF2E63] text-white text-xs font-bold hover:bg-[#FF3B69] transition-colors cursor-pointer"
                     >
                       Trigger Re-Pairing Now
@@ -848,17 +1014,10 @@ export default function App() {
               </div>
 
               <div className="bg-[#171820] border border-[#252733] rounded-2xl p-6 space-y-3">
-                {[
-                  { name: 'Wireless Bluetooth Speaker', desc: 'Bluetooth Soundbox (A2DP / HFP)', battery: speakerBatteryLevel },
-                  { name: 'Realtek High Definition Audio', desc: 'Internal Laptop Speakers', battery: null },
-                  { name: 'External USB Soundcard DAC', desc: 'Auxiliary Audio Output', battery: null }
-                ].map((d) => (
+                {endpoints.map((d) => (
                   <div
-                    key={d.name}
-                    onClick={() => {
-                      setSelectedDevice(d.name);
-                      showToast(`Switched active keep-alive output to ${d.name}`);
-                    }}
+                    key={d.id}
+                    onClick={() => handleSelectDevice(d.number, d.name)}
                     className={`p-4 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
                       selectedDevice === d.name
                         ? 'bg-[#25121B] border-[#481827]'
@@ -871,14 +1030,14 @@ export default function App() {
                       </div>
                       <div>
                         <p className="text-sm font-bold text-white">{d.name}</p>
-                        <p className="text-xs text-[#7F869A]">{d.desc}</p>
+                        <p className="text-xs text-[#7F869A]">{d.category}</p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      {d.battery !== null && (
+                      {d.isBluetooth && (
                         <span className="text-xs font-mono font-bold text-[#10B981] bg-[#10B981]/15 px-2.5 py-1 rounded-lg">
-                          🔋 {d.battery}% Speaker
+                          🔋 {speakerBatteryLevel}% Speaker
                         </span>
                       )}
                       <span className="text-xs font-bold text-[#FF4B72]">
@@ -927,7 +1086,7 @@ export default function App() {
                       <CheckCircle2 className="w-4 h-4" />
                       <span>{updateStatus}</span>
                     </span>
-                    <span className="text-xs text-[#7F869A] font-mono">Local Version: v1.0.4</span>
+                    <span className="text-xs text-[#7F869A] font-mono">Local Version: {appVersion}</span>
                   </div>
 
                   {latestRelease && (
@@ -966,7 +1125,14 @@ export default function App() {
                     <p className="text-sm font-bold text-white">Start with Windows</p>
                     <p className="text-xs text-[#7F869A]">Launch Keep Alive automatically when logging into Windows</p>
                   </div>
-                  <input type="checkbox" defaultChecked className="w-4 h-4 accent-[#FF3B69]" />
+                  <input
+                    type="checkbox"
+                    checked={startOnStartup}
+                    onChange={(e) =>
+                      handleSettingChange('startOnWindowsStartup', e.target.checked, setStartOnStartup)
+                    }
+                    className="w-4 h-4 accent-[#FF3B69] cursor-pointer"
+                  />
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -974,12 +1140,34 @@ export default function App() {
                     <p className="text-sm font-bold text-white">Minimize to System Tray</p>
                     <p className="text-xs text-[#7F869A]">Runs silently in notification tray without blocking taskbar</p>
                   </div>
-                  <input type="checkbox" defaultChecked className="w-4 h-4 accent-[#FF3B69]" />
+                  <input
+                    type="checkbox"
+                    checked={minimizeToTray}
+                    onChange={(e) =>
+                      handleSettingChange('minimizeToTrayOnClose', e.target.checked, setMinimizeToTray)
+                    }
+                    className="w-4 h-4 accent-[#FF3B69] cursor-pointer"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-bold text-white">Show Toast Notifications</p>
+                    <p className="text-xs text-[#7F869A]">Displays Windows notification alerts when keep-alive stream starts/stops</p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={showNotifications}
+                    onChange={(e) =>
+                      handleSettingChange('showNotifications', e.target.checked, setShowNotifications)
+                    }
+                    className="w-4 h-4 accent-[#FF3B69] cursor-pointer"
+                  />
                 </div>
 
                 <div className="pt-4 border-t border-[#252733] flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-bold text-white">Bluetooth KeepAlive Desktop Suite</p>
+                    <p className="text-sm font-bold text-white">Bluetooth KeepAlive Desktop Suite ({appVersion})</p>
                     <p className="text-xs text-[#7F869A]">Developer: Tausif Rahaman Raiyan • Windows 10 &amp; 11 x64</p>
                   </div>
                   <a
@@ -999,7 +1187,7 @@ export default function App() {
 
         {/* Footer */}
         <footer className="h-8 px-6 bg-[#090A0E] border-t border-[#181924] flex items-center justify-between text-[11px] text-[#6F768A] flex-shrink-0">
-          <span>Bluetooth KeepAlive v1.0.4 • Developed by Tausif Rahaman Raiyan</span>
+          <span>Bluetooth KeepAlive {appVersion} • Developed by Tausif Rahaman Raiyan</span>
           <a
             href="https://github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive"
             target="_blank"

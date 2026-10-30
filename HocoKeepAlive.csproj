@@ -8,9 +8,9 @@
     <ApplicationIcon>assets\hoco-keepalive.ico</ApplicationIcon>
     <AssemblyName>Keep Alive</AssemblyName>
     <RootNamespace>HocoKeepAlive</RootNamespace>
-    <Version>1.0.4</Version>
-    <FileVersion>1.0.4.0</FileVersion>
-    <AssemblyVersion>1.0.4.0</AssemblyVersion>
+    <Version>1.0.5</Version>
+    <FileVersion>1.0.5.0</FileVersion>
+    <AssemblyVersion>1.0.5.0</AssemblyVersion>
     <Description>Silent Bluetooth audio keep-alive utility</Description>
     <Company>Raiyan</Company>
     <Product>Keep Alive</Product>
@@ -18,7 +18,7 @@
     <ApplicationVisualStyles>true</ApplicationVisualStyles>
     <ApplicationUseCompatibleTextRendering>false</ApplicationUseCompatibleTextRendering>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <DefaultItemExcludes>$(DefaultItemExcludes);tests\**;node_modules\**;dist\**;web\**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);tests\**;node_modules\**;dist\**;web\**;wwwroot\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,8 +27,14 @@
     <Compile Remove="web\**" />
   </ItemGroup>
 
+  <!-- Built React UI (npm run build -> dist) is shipped next to the exe as wwwroot -->
+  <ItemGroup Condition="Exists('dist\index.html')">
+    <Content Include="dist\**\*" Link="wwwroot\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="assets\hoco-keepalive.ico" />
     <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2792.45" />
   </ItemGroup>
 </Project>
