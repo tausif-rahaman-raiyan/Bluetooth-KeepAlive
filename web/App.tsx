@@ -574,15 +574,6 @@ export default function App() {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={() => checkForUpdates(true)}
-              disabled={checkingUpdate}
-              className="px-3 py-1.5 rounded-lg bg-[#1D1E2B] border border-[#2C2E42] text-xs font-semibold text-[#A3ABB8] hover:text-white hover:bg-[#25273A] transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${checkingUpdate ? 'animate-spin text-[#FF3B69]' : ''}`} />
-              <span>{checkingUpdate ? 'Checking...' : 'Check Updates'}</span>
-            </button>
-
-            <button
               onClick={toggleKeepAlive}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 border ${
                 isRunning
