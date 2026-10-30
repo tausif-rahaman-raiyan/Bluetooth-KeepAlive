@@ -172,13 +172,16 @@ public sealed class MainForm : Form
         };
         cardProfile.Click += (_, _) => OpenUrl("https://github.com/tausif-rahaman-raiyan");
 
-        var picDevAvatar = new PictureBox
+        var picDevAvatar = new Label
         {
-            Image = appIcon.ToBitmap(),
-            SizeMode = PictureBoxSizeMode.Zoom,
-            Size = new Size(26, 26),
+            Text = "TR",
+            TextAlign = ContentAlignment.MiddleCenter,
+            ForeColor = Color.White,
+            Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
+            Size = new Size(28, 28),
             Location = new Point(10, 14),
-            BackColor = Color.Transparent
+            BackColor = AccentCrimson,
+            Cursor = Cursors.Hand
         };
         picDevAvatar.Click += (_, _) => OpenUrl("https://github.com/tausif-rahaman-raiyan");
 
@@ -211,10 +214,13 @@ public sealed class MainForm : Form
 
         // Order docking in sidebar
         _sidebarPanel.Controls.Clear();
+        // Keep the fill navigation panel behind the fixed header and footer.
+        // Bringing the fill panel to front caused it to cover the developer profile card.
+        _sidebarPanel.Controls.Add(pnlNav);
         _sidebarPanel.Controls.Add(pnlBrand);
         _sidebarPanel.Controls.Add(pnlSidebarFooter);
-        _sidebarPanel.Controls.Add(pnlNav);
-        pnlNav.BringToFront();
+        pnlSidebarFooter.BringToFront();
+        pnlBrand.BringToFront();
 
         // --- Main Content Area (Right) ---
         var pnlMainArea = new Panel
@@ -613,8 +619,8 @@ public sealed class MainForm : Form
         pnlStatsGrid.Controls.Add(CreateStatCard(
             0, cardWidth, cardHeight,
             "🔋", "Speaker Battery",
-            "85%",
-            "↗ Connected",
+            "Not reported",
+            "Windows battery data unavailable",
             _lblStatBattery,
             ColorSuccess));
 
@@ -1626,7 +1632,7 @@ public sealed class MainForm : Form
 
         if (_lblStatBattery != null)
         {
-            _lblStatBattery.Text = isRunning ? "85%" : (isCall ? "Standby" : "85%");
+            _lblStatBattery.Text = "Not reported by Windows";
         }
     }
 
