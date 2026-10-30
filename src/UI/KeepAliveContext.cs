@@ -15,6 +15,7 @@ public sealed class KeepAliveContext : ApplicationContext
     private readonly Control _uiDispatcher;
     private MainForm? _mainForm;
     private bool _isExiting;
+    private readonly Dictionary<AudioEngineState, DateTime> _lastNotificationByState = new();
 
     public KeepAliveContext(bool startMinimized)
     {
@@ -144,7 +145,7 @@ public sealed class KeepAliveContext : ApplicationContext
                 _tray.Text = "Keep Alive — Running";
                 if (_settings.ShowNotifications && _settings.NotifyOnStartStop)
                 {
-                    _tray.ShowBalloonTip(1500, "Keep Alive", "Silent stream active. Bluetooth audio connection is maintained.", ToolTipIcon.Info);
+                    ShowStateNotification(state, 1500, "Silent stream active. Bluetooth audio connection is maintained.", ToolTipIcon.Info);
                 }
                 break;
 
@@ -168,7 +169,7 @@ public sealed class KeepAliveContext : ApplicationContext
                 _tray.Text = "Keep Alive — Unavailable";
                 if (_settings.ShowNotifications && _settings.NotifyOnError)
                 {
-                    _tray.ShowBalloonTip(2000, "Keep Alive", "Selected device is unavailable. Please check your Bluetooth connection.", ToolTipIcon.Warning);
+                    ShowStateNotification(state, 2000, "Selected device is unavailable. Please check your Bluetooth connection.", ToolTipIcon.Warning);
                 }
                 break;
 
@@ -177,7 +178,7 @@ public sealed class KeepAliveContext : ApplicationContext
                 _tray.Text = "Keep Alive — Error";
                 if (_settings.ShowNotifications && _settings.NotifyOnError)
                 {
-                    _tray.ShowBalloonTip(2500, "Keep Alive", $"Audio error: {message ?? "Unknown error"}", ToolTipIcon.Error);
+                    ShowStateNotification(state, 2500, $"Audio error: {message ?? "Unknown error"}", ToolTipIcon.Error);
                 }
                 break;
 
@@ -186,10 +187,24 @@ public sealed class KeepAliveContext : ApplicationContext
                 _tray.Text = "Keep Alive — Stopped";
                 if (_settings.ShowNotifications && _settings.NotifyOnStartStop && state == AudioEngineState.Stopped)
                 {
-                    _tray.ShowBalloonTip(1200, "Keep Alive", "Silent stream stopped.", ToolTipIcon.Info);
+                    ShowStateNotification(state, 1200, "Silent stream stopped.", ToolTipIcon.Info);
                 }
                 break;
         }
+    }
+
+    // Rate-limit repeated audio-state callbacks to prevent notification flooding.
+    private void ShowStateNotification(AudioEngineState state, int durationMs, string message, ToolTipIcon icon)
+    {
+        var now = DateTime.UtcNow;
+        if (_lastNotificationByState.TryGetValue(state, out var lastShown) &&
+            (now - lastShown).TotalSeconds < 45)
+        {
+            return;
+        }
+
+        _lastNotificationByState[state] = now;
+        _tray.ShowBalloonTip(durationMs, "Keep Alive", message, icon);
     }
 
     private void ExitApp()
