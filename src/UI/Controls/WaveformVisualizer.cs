@@ -135,29 +135,36 @@ public sealed class WaveformVisualizer : Control
         // Base amplitude
         float baseAmp = _isActive ? Math.Clamp(h * 0.28f, 22f, 48f) : 10f;
 
-        // Draw 4 distinct flowing multi-layered sinusoidal ribbon waves (Exact match to React Canvas)
-        // Ribbon 1: Crimson Base Atmosphere Glow
+        // Draw 5 distinct flowing multi-layered sinusoidal ribbon waves with ambient glow underlay
+        // Layer 0: Deep Ambient Glow Underlay
+        Color glowUnder = _isActive ? Color.FromArgb(30, 255, 46, 99) : Color.FromArgb(15, 16, 185, 129);
+        using (var glowPen = new Pen(glowUnder, 16f))
+        {
+            DrawCompoundSinWave(g, glowPen, w, midY, baseAmp * 1.25f, 0.005f, 0.012f, 1.0f, _phase, 0);
+        }
+
+        // Layer 1: Crimson Base Atmosphere Wave
         Color color1 = _isActive ? Color.FromArgb(60, 255, 46, 99) : Color.FromArgb(30, 16, 185, 129);
         using (var pen1 = new Pen(color1, 7f))
         {
             DrawCompoundSinWave(g, pen1, w, midY, baseAmp * 1.15f, 0.005f, 0.012f, 1.0f, _phase, 0);
         }
 
-        // Ribbon 2: Secondary Vivid Pink Wave
+        // Layer 2: Secondary Vivid Pink Wave
         Color color2 = _isActive ? Color.FromArgb(160, 255, 75, 114) : Color.FromArgb(100, 16, 185, 129);
         using (var pen2 = new Pen(color2, 4f))
         {
             DrawCompoundSinWave(g, pen2, w, midY, baseAmp * 0.95f, 0.007f, 0.015f, 1.25f, _phase, 1);
         }
 
-        // Ribbon 3: Deep Coral / Rose Wave
+        // Layer 3: Deep Coral / Rose Wave
         Color color3 = _isActive ? Color.FromArgb(210, 230, 57, 86) : Color.FromArgb(160, 52, 211, 153);
         using (var pen3 = new Pen(color3, 3f))
         {
             DrawCompoundSinWave(g, pen3, w, midY, baseAmp * 0.8f, 0.006f, 0.018f, 0.85f, _phase, 2);
         }
 
-        // Ribbon 4: Top Focal Bright Pink Ribbon
+        // Layer 4: Top Focal Bright Pink Ribbon
         Color color4 = _isActive ? Color.FromArgb(245, 255, 130, 160) : Color.FromArgb(220, 110, 231, 183);
         using (var pen4 = new Pen(color4, 2.2f))
         {

@@ -11,9 +11,9 @@ public sealed class SilentWaveProvider : IWaveProvider
 {
     private int _sampleCounter;
     public WaveFormat WaveFormat { get; }
-    public bool UseAntiSleepDither { get; set; } = true;
+    public bool UseAntiSleepDither { get; set; }
 
-    public SilentWaveProvider(int sampleRate = 48000, int channels = 2, bool useAntiSleepDither = true)
+    public SilentWaveProvider(int sampleRate = 48000, int channels = 2, bool useAntiSleepDither = false)
     {
         WaveFormat = new WaveFormat(sampleRate, 16, channels);
         UseAntiSleepDither = useAntiSleepDither;
@@ -32,18 +32,21 @@ public sealed class SilentWaveProvider : IWaveProvider
 
         if (UseAntiSleepDither)
         {
-            // Inject sub-audible 1-LSB dither (amplitude 1 out of 32768, -90.3 dB).
-            // Completely inaudible to human ears, but signals continuous PCM audio traffic
-            // to Bluetooth hardware DSPs (Jerry/JL/Realtek/CSR) so they never trigger auto-sleep or disconnect.
-            int sampleCount = count / 2;
-            for (int i = 0; i < sampleCount; i += 4)
+            // Inject sub-audible 1-LSB dither roughly once every 480 samples (~100 Hz at 48kHz).
+            // Inaudible to human ears, but signals audio activity to hardware DSPs that measure amplitude.
+            int sampleCount = count / 2; // 16-bit samples (2 bytes per sample)
+            for (int i = 0; i < sampleCount; i++)
             {
-                short dither = (_sampleCounter++ % 2 == 0) ? (short)1 : (short)-1;
-                int byteOffset = offset + (i * 2);
-                if (byteOffset + 1 < offset + count)
+                _sampleCounter++;
+                if (_sampleCounter % 480 == 0)
                 {
-                    buffer[byteOffset] = (byte)(dither & 0xFF);
-                    buffer[byteOffset + 1] = (byte)((dither >> 8) & 0xFF);
+                    short dither = (_sampleCounter / 480 % 2 == 0) ? (short)1 : (short)-1;
+                    int byteOffset = offset + (i * 2);
+                    if (byteOffset + 1 < offset + count)
+                    {
+                        buffer[byteOffset] = (byte)(dither & 0xFF);
+                        buffer[byteOffset + 1] = (byte)((dither >> 8) & 0xFF);
+                    }
                 }
             }
         }

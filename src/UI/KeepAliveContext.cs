@@ -36,6 +36,7 @@ public sealed class KeepAliveContext : ApplicationContext
             AlwaysKeepStreamActive = _settings.AlwaysKeepStreamActive,
             CallProtectionMode = _settings.CallProtectionMode,
             PreferBluetoothSoundbox = _settings.PreferBluetoothSoundbox,
+            AntiSleepDither = _settings.AntiSleepDither,
             ResumeDelayMilliseconds = _settings.ResumeDelayMilliseconds,
             SampleRate = _settings.SampleRate,
             Channels = _settings.Channels,
@@ -68,6 +69,8 @@ public sealed class KeepAliveContext : ApplicationContext
             Visible = true
         };
 
+        NotificationService.Initialize(_tray);
+
         // Single left-click or double-click on the hidden system-tray icon opens Dashboard immediately
         _tray.MouseClick += (_, e) =>
         {
@@ -80,12 +83,21 @@ public sealed class KeepAliveContext : ApplicationContext
 
         _audioService.StateChanged += OnAudioStateChanged;
 
+        // Initialize WinRT Bluetooth DeviceWatcher for instant event-driven detection
+        InitDeviceWatcher();
+
+        // Register Global Hotkey (Ctrl+Alt+K)
+        if (_settings.GlobalHotkeyEnabled)
+        {
+            InitHotKey();
+        }
+
         if (_settings.ShowNotifications)
         {
             _tray.ShowBalloonTip(2000, "Keep Alive", "Ready in notification area. Right-click or double-click to start.", ToolTipIcon.Info);
         }
 
-        if (_settings.AutoStartStreamOnLaunch)
+        if (_settings.AutoStartStreamOnLaunch && IsInActiveScheduleWindow())
         {
             _audioService.Start();
         }
@@ -96,6 +108,71 @@ public sealed class KeepAliveContext : ApplicationContext
         }
 
         LogService.Log(LogSeverity.Info, "Lifecycle", "Keep Alive context initialized.");
+    }
+
+    private BluetoothDeviceWatcher? _deviceWatcher;
+    private Services.HotKeyManager? _hotKeyManager;
+
+    private void InitDeviceWatcher()
+    {
+        try
+        {
+            _deviceWatcher = new BluetoothDeviceWatcher();
+            _deviceWatcher.DeviceConnected += (name, id) =>
+            {
+                LogService.Log(LogSeverity.Info, "BluetoothWatcher", $"Connected: {name}");
+                if (_settings.AutoStartOnConnect && IsInActiveScheduleWindow())
+                {
+                    if (_audioService.CurrentState == AudioEngineState.Stopped || _audioService.CurrentState == AudioEngineState.DeviceUnavailable)
+                    {
+                        _audioService.Start();
+                        NotificationService.ShowNotification("Speaker Connected", $"Auto-started KeepAlive stream for {name}", ToolTipIcon.Info);
+                    }
+                }
+            };
+            _deviceWatcher.DeviceDisconnected += (name, id) =>
+            {
+                LogService.Log(LogSeverity.Warning, "BluetoothWatcher", $"Disconnected: {name}");
+            };
+            _deviceWatcher.StartWatcher();
+        }
+        catch (Exception ex)
+        {
+            LogService.Log(LogSeverity.Warning, "BluetoothWatcher", "DeviceWatcher setup failed: " + ex.Message);
+        }
+    }
+
+    private void InitHotKey()
+    {
+        try
+        {
+            _hotKeyManager = new Services.HotKeyManager();
+            _hotKeyManager.Register();
+            _hotKeyManager.HotKeyPressed += () =>
+            {
+                _audioService.Toggle();
+            };
+        }
+        catch (Exception ex)
+        {
+            LogService.Log(LogSeverity.Warning, "HotKey", "HotKey registration failed: " + ex.Message);
+        }
+    }
+
+    private bool IsInActiveScheduleWindow()
+    {
+        if (!_settings.ScheduleEnabled) return true;
+
+        int currentHour = DateTime.Now.Hour;
+        if (_settings.ScheduleStartHour <= _settings.ScheduleEndHour)
+        {
+            return currentHour >= _settings.ScheduleStartHour && currentHour < _settings.ScheduleEndHour;
+        }
+        else
+        {
+            // Crosses midnight (e.g. 20:00 to 02:00)
+            return currentHour >= _settings.ScheduleStartHour || currentHour < _settings.ScheduleEndHour;
+        }
     }
 
     private static Icon LoadAppIcon()
@@ -230,6 +307,9 @@ public sealed class KeepAliveContext : ApplicationContext
 
         LogService.Log(LogSeverity.Info, "Lifecycle", "Application exiting cleanly.");
 
+        _hotKeyManager?.Dispose();
+        _deviceWatcher?.Dispose();
+
         _audioService.Stop();
         _audioService.Dispose();
 
@@ -247,6 +327,8 @@ public sealed class KeepAliveContext : ApplicationContext
     {
         if (disposing)
         {
+            _hotKeyManager?.Dispose();
+            _deviceWatcher?.Dispose();
             _audioService.StateChanged -= OnAudioStateChanged;
             _audioService.Dispose();
             _uiDispatcher.Dispose();

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -22,19 +22,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Test sources and web sources must be excluded from application compilation -->
+    <!-- Test sources and web sources are excluded from application compilation -->
     <Compile Remove="tests\**" />
     <Compile Remove="web\**" />
-  </ItemGroup>
-
-  <!-- Built React UI (npm run build -> dist) is shipped next to the exe as wwwroot -->
-  <ItemGroup Condition="Exists('dist\index.html')">
-    <Content Include="dist\**\*" Link="wwwroot\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="assets\hoco-keepalive.ico" />
     <PackageReference Include="NAudio" Version="2.2.1" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2792.45" />
   </ItemGroup>
 </Project>

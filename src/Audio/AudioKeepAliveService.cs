@@ -48,6 +48,24 @@ public sealed class AudioKeepAliveService : IDisposable
     private bool _preferBluetoothSoundbox = true;
     private int _resumeDelayMilliseconds = 1200;
 
+    private bool _antiSleepDither = false;
+
+    public bool AntiSleepDither
+    {
+        get => _antiSleepDither;
+        set
+        {
+            lock (_syncRoot)
+            {
+                _antiSleepDither = value;
+                if (_provider != null)
+                {
+                    _provider.UseAntiSleepDither = value;
+                }
+            }
+        }
+    }
+
     public int SampleRate { get; set; } = 48000;
     public int Channels { get; set; } = 2;
     public int LatencyMs { get; set; } = 150;
@@ -300,7 +318,7 @@ public sealed class AudioKeepAliveService : IDisposable
                 return false;
             }
 
-            _provider = new SilentWaveProvider(SampleRate, Channels);
+            _provider = new SilentWaveProvider(SampleRate, Channels, _antiSleepDither);
             _output = new WaveOutEvent
             {
                 DeviceNumber = deviceToUse,

@@ -23,6 +23,15 @@ public sealed class AppSettings
     public bool AlwaysKeepStreamActive { get; set; } = true;
     public bool CallProtectionMode { get; set; } = true;
     public bool PreferBluetoothSoundbox { get; set; } = true;
+    public bool AntiSleepDither { get; set; } = false;
+    public string Language { get; set; } = "en"; // "en" or "bn"
+    public bool GlobalHotkeyEnabled { get; set; } = true;
+    public bool AutoStartOnConnect { get; set; } = true;
+    public bool LowBatteryNotification { get; set; } = true;
+    public bool ScheduleEnabled { get; set; } = false;
+    public int ScheduleStartHour { get; set; } = 20; // 8 PM
+    public int ScheduleEndHour { get; set; } = 24;   // 12 AM
+    public List<SpeakerProfile> SpeakerProfiles { get; set; } = new();
     public string LastKnownBluetoothDevice { get; set; } = "Bluetooth Wireless Speaker";
     public int ResumeDelayMilliseconds { get; set; } = 1200;
     public int SampleRate { get; set; } = 48000;

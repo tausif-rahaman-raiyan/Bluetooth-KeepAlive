@@ -67,16 +67,35 @@ public class SilentWaveProviderTests
     }
 
     [Fact]
-    public void Read_AppliesSubAudibleDitherWhenEnabled()
+    public void Read_ZeroMode_ReturnsAllZeros()
+    {
+        var provider = new SilentWaveProvider(useAntiSleepDither: false);
+        byte[] buffer = new byte[2000];
+        provider.Read(buffer, 0, buffer.Length);
+        Assert.All(buffer, b => Assert.Equal(0, b));
+    }
+
+    [Fact]
+    public void Read_DitherMode_ReturnsValuesInRangeMinusOneToOneWithNonZeroSample()
     {
         var provider = new SilentWaveProvider(useAntiSleepDither: true);
-        byte[] buffer = new byte[1024];
-
+        byte[] buffer = new byte[4000]; // 2000 16-bit samples
         int bytesRead = provider.Read(buffer, 0, buffer.Length);
 
         Assert.Equal(buffer.Length, bytesRead);
-        // Ensure dither injected non-zero LSB signals
-        Assert.Contains(buffer, b => b != 0);
+
+        bool foundNonZero = false;
+        for (int i = 0; i < buffer.Length; i += 2)
+        {
+            short sample = BitConverter.ToInt16(buffer, i);
+            Assert.True(sample is >= -1 and <= 1, $"Sample value {sample} is out of expected range -1..1");
+            if (sample != 0)
+            {
+                foundNonZero = true;
+            }
+        }
+
+        Assert.True(foundNonZero, "Dither mode should produce at least one non-zero 16-bit sample");
     }
 
     [Fact]

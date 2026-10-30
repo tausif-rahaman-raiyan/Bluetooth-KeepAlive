@@ -17,17 +17,6 @@ internal static class Program
             return;
         }
 
-        try
-        {
-            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-        }
-        catch
-        {
-            // Fallback if already initialized by runtime
-        }
-
         ApplicationConfiguration.Initialize();
 
         bool startMinimized = args.Any(a => string.Equals(a, "--minimized", StringComparison.OrdinalIgnoreCase) ||
