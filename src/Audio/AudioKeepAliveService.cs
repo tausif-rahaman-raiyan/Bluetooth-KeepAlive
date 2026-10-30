@@ -295,6 +295,13 @@ public sealed class AudioKeepAliveService : IDisposable
                 _lastError = msg;
                 LogService.Log(LogSeverity.Warning, "AudioEngine", msg);
                 SetState(AudioEngineState.DeviceUnavailable, msg);
+                // Keep watching for the previously selected, already-paired endpoint.
+                // Windows performs the actual Bluetooth reconnection; once the audio
+                // endpoint returns, the watchdog restarts the silent stream automatically.
+                if (_autoReconnect && !_userExplicitlyStopped)
+                {
+                    StartReconnectionWatchdog();
+                }
                 return false;
             }
 
