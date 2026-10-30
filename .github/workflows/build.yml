@@ -29,6 +29,7 @@ concurrency:
 env:
   ACTIONS_RUNNER_FORCE_NODE24: "true"
   FORCE_JAVASCRIPT_ACTIONS_ON_NODE24: "true"
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
 
 jobs:
   build-setup:

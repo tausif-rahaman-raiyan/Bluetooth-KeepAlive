@@ -454,39 +454,16 @@ public sealed class AudioKeepAliveService : IDisposable
                 }
             }
 
-            // 2. Continuous Keep-Alive & Foreground Audio Handling
-            if (!_autoPauseOnOtherAudio || AlwaysKeepStreamActive)
+            // 2. Continuous Anti-Disconnect Audio Stream
+            // In Windows WASAPI / DirectSound shared-mode audio, our silent stream with sub-audible 1-LSB dither
+            // mixes transparently with YouTube, Spotify, and media players.
+            // When media is paused, our PCM stream is ALREADY actively pumping packets, so the Bluetooth hardware
+            // DSP never detects an idle gap and NEVER disconnects after 5-10 seconds of pause!
+            if (_state == AudioEngineState.Running && _output != null)
             {
-                // Continuous Mode: In Windows shared-mode audio, our silent stream with anti-sleep dither
-                // mixes transparently with YouTube/Spotify. When media is paused, our stream is ALREADY
-                // active and pumping PCM packets, so the Bluetooth speaker never enters standby or disconnects!
-                if (_state == AudioEngineState.PausedByOtherAudio || _output == null)
+                if (_output.PlaybackState != PlaybackState.Playing)
                 {
-                    ResumeKeepAliveStream();
-                }
-                return;
-            }
-
-            float peak = GetMasterPeakValue();
-
-            // Threshold: 0.003f (0.3% amplitude). Digital silence from our provider is strictly 0.000f.
-            if (peak > 0.003f)
-            {
-                _lastOtherAudioDetectedUtc = DateTime.UtcNow;
-
-                if (_state == AudioEngineState.Running)
-                {
-                    // Gentle pause without tearing down device handle so resume is instantaneous
-                    try { _output?.Pause(); } catch { }
-                    SetState(AudioEngineState.PausedByOtherAudio, "Other audio detected. Keep-alive paused while media plays.");
-                }
-            }
-            else
-            {
-                // Silence detected: user paused media! Immediately resume keepalive stream
-                if (_state == AudioEngineState.PausedByOtherAudio)
-                {
-                    ResumeKeepAliveStream();
+                    try { _output.Play(); } catch { }
                 }
             }
         }
