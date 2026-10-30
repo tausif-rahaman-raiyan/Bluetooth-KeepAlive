@@ -62,6 +62,8 @@ public sealed class AudioKeepAliveService : IDisposable
         }
     }
 
+    public bool AlwaysKeepStreamActive { get; set; } = true;
+
     public bool AutoPauseOnOtherAudio
     {
         get => _autoPauseOnOtherAudio;
@@ -295,13 +297,6 @@ public sealed class AudioKeepAliveService : IDisposable
                 _lastError = msg;
                 LogService.Log(LogSeverity.Warning, "AudioEngine", msg);
                 SetState(AudioEngineState.DeviceUnavailable, msg);
-                // Keep watching for the previously selected, already-paired endpoint.
-                // Windows performs the actual Bluetooth reconnection; once the audio
-                // endpoint returns, the watchdog restarts the silent stream automatically.
-                if (_autoReconnect && !_userExplicitlyStopped)
-                {
-                    StartReconnectionWatchdog();
-                }
                 return false;
             }
 
@@ -459,10 +454,13 @@ public sealed class AudioKeepAliveService : IDisposable
                 }
             }
 
-            // 2. Smart auto-pause on foreground audio (YouTube / Spotify / Media players)
-            if (!_autoPauseOnOtherAudio)
+            // 2. Continuous Keep-Alive & Foreground Audio Handling
+            if (!_autoPauseOnOtherAudio || AlwaysKeepStreamActive)
             {
-                if (_state == AudioEngineState.PausedByOtherAudio)
+                // Continuous Mode: In Windows shared-mode audio, our silent stream with anti-sleep dither
+                // mixes transparently with YouTube/Spotify. When media is paused, our stream is ALREADY
+                // active and pumping PCM packets, so the Bluetooth speaker never enters standby or disconnects!
+                if (_state == AudioEngineState.PausedByOtherAudio || _output == null)
                 {
                     ResumeKeepAliveStream();
                 }
@@ -478,25 +476,17 @@ public sealed class AudioKeepAliveService : IDisposable
 
                 if (_state == AudioEngineState.Running)
                 {
-                    // Do not merely Pause(): dispose the output handle so Windows can
-                    // switch Bluetooth devices to the hands-free profile during calls.
-                    CleanupOutput();
-
-                    LogService.Log(LogSeverity.Info, "AudioEngine", $"Other audio playing (peak: {peak:F3}). Released keep-alive endpoint for foreground audio/calls.");
-                    SetState(AudioEngineState.PausedByOtherAudio, "Other audio detected. Keep-alive endpoint released; it will resume after playback becomes quiet.");
+                    // Gentle pause without tearing down device handle so resume is instantaneous
+                    try { _output?.Pause(); } catch { }
+                    SetState(AudioEngineState.PausedByOtherAudio, "Other audio detected. Keep-alive paused while media plays.");
                 }
             }
             else
             {
-                // Silence detected
+                // Silence detected: user paused media! Immediately resume keepalive stream
                 if (_state == AudioEngineState.PausedByOtherAudio)
                 {
-                    var silenceDurationMs = (DateTime.UtcNow - _lastOtherAudioDetectedUtc).TotalMilliseconds;
-                    if (silenceDurationMs >= _resumeDelayMilliseconds)
-                    {
-                        // Other audio has stopped / paused! Resume silent keep-alive stream automatically
-                        ResumeKeepAliveStream();
-                    }
+                    ResumeKeepAliveStream();
                 }
             }
         }

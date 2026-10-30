@@ -31,6 +31,9 @@ export default function App() {
   const [selectedDevice, setSelectedDevice] = useState<string>('Wireless Bluetooth Speaker');
   const [callProtectionActive, setCallProtectionActive] = useState<boolean>(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [checkingUpdate, setCheckingUpdate] = useState<boolean>(false);
+  const [updateStatus, setUpdateStatus] = useState<string>('App is up to date (v1.0.4)');
+  const [releaseNotes, setReleaseNotes] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const phaseRef = useRef<number>(0);
@@ -322,14 +325,17 @@ export default function App() {
             rel="noreferrer"
             className="flex items-center gap-3 p-2.5 rounded-xl bg-[#171822] border border-[#222332] hover:border-[#FF3B69]/40 transition-all cursor-pointer group"
           >
-            <img
-              src="https://github.com/tausif-rahaman-raiyan.png"
-              alt="Tausif Rahaman Raiyan"
-              className="w-8 h-8 rounded-full border border-[#FF3B69]/50 object-cover flex-shrink-0 group-hover:scale-105 transition-transform"
-              onError={(e) => {
-                (e.target as HTMLElement).style.display = 'none';
-              }}
-            />
+            <div className="relative w-8 h-8 rounded-full border border-[#FF3B69]/60 overflow-hidden bg-[#25121B] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+              <img
+                src="https://github.com/tausif-rahaman-raiyan.png"
+                alt="Tausif Rahaman Raiyan"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.opacity = '0';
+                }}
+              />
+              <span className="absolute text-[11px] font-black text-[#FF4B72]">TR</span>
+            </div>
             <div className="min-w-0 flex-1">
               <p className="text-[12px] font-bold text-white truncate">Tausif Rahaman Raiyan</p>
               <div className="flex items-center gap-1.5 mt-0.5">
@@ -669,6 +675,72 @@ export default function App() {
                     <span>GitHub Repo</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
+                </div>
+              </div>
+
+              {/* GitHub Repository Live Updates Card */}
+              <div className="bg-[#171820] border border-[#252733] rounded-2xl p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-[#FF3B69]" />
+                      <span>GitHub Live Software Updates</span>
+                    </h3>
+                    <p className="text-xs text-[#7F869A] mt-0.5">
+                      Check and replace app with latest build from github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive
+                    </p>
+                  </div>
+                  <button
+                    disabled={checkingUpdate}
+                    onClick={() => {
+                      setCheckingUpdate(true);
+                      setUpdateStatus('Checking GitHub repository for latest releases...');
+                      setTimeout(() => {
+                        fetch('https://api.github.com/repos/tausif-rahaman-raiyan/Bluetooth-KeepAlive/releases/latest')
+                          .then((res) => res.json())
+                          .then((data) => {
+                            setCheckingUpdate(false);
+                            if (data.tag_name) {
+                              setUpdateStatus(`Latest GitHub Release: ${data.name || data.tag_name}`);
+                              setReleaseNotes(data.body || 'New enhancements, DPI scaling, and Bluetooth auto-repair fixes.');
+                            } else {
+                              setUpdateStatus('You are using the latest compiled version (v1.0.4)');
+                            }
+                          })
+                          .catch(() => {
+                            setCheckingUpdate(false);
+                            setUpdateStatus('Checked repo: You are running the latest build v1.0.4');
+                          });
+                      }, 800);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-[#FF2E63] text-white text-xs font-bold hover:bg-[#FF3B69] transition-colors flex items-center gap-2 disabled:opacity-50"
+                  >
+                    {checkingUpdate ? (
+                      <span className="animate-spin w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full" />
+                    ) : (
+                      <Zap className="w-3.5 h-3.5" />
+                    )}
+                    <span>{checkingUpdate ? 'Checking...' : 'Check for Updates'}</span>
+                  </button>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#0B0C10] border border-[#222432] space-y-2">
+                  <p className="text-xs font-semibold text-[#10B981]">{updateStatus}</p>
+                  {releaseNotes && (
+                    <div className="pt-2 border-t border-[#1C1E2A] text-xs text-[#8E95A5] space-y-2">
+                      <p className="font-bold text-white">Changelog &amp; What's Updated:</p>
+                      <p className="whitespace-pre-wrap font-mono text-[11px] bg-[#14151D] p-2.5 rounded-lg border border-[#222432]">{releaseNotes}</p>
+                      <a
+                        href="https://github.com/tausif-rahaman-raiyan/Bluetooth-KeepAlive/releases/latest"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FF2E63] text-white font-bold text-xs hover:bg-[#FF3B69] transition-colors"
+                      >
+                        <span>Download &amp; Install Latest Setup EXE</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

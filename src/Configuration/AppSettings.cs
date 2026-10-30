@@ -19,7 +19,8 @@ public sealed class AppSettings
     public bool NotifyOnStartStop { get; set; } = true;
     public bool NotifyOnError { get; set; } = true;
     public bool AutoReconnectOnDeviceAvailable { get; set; } = true;
-    public bool AutoPauseOnOtherAudio { get; set; } = true;
+    public bool AutoPauseOnOtherAudio { get; set; } = false;
+    public bool AlwaysKeepStreamActive { get; set; } = true;
     public bool CallProtectionMode { get; set; } = true;
     public bool PreferBluetoothSoundbox { get; set; } = true;
     public string LastKnownBluetoothDevice { get; set; } = "Bluetooth Wireless Speaker";

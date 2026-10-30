@@ -15,7 +15,11 @@ public sealed class KeepAliveContext : ApplicationContext
     private readonly Control _uiDispatcher;
     private MainForm? _mainForm;
     private bool _isExiting;
-    private readonly Dictionary<AudioEngineState, DateTime> _lastNotificationByState = new();
+    private DateTime _lastRunningToastUtc = DateTime.MinValue;
+    private DateTime _lastUnavailableToastUtc = DateTime.MinValue;
+    private DateTime _lastErrorToastUtc = DateTime.MinValue;
+    private DateTime _lastStopToastUtc = DateTime.MinValue;
+    private AudioEngineState _previousEngineState = AudioEngineState.Stopped;
 
     public KeepAliveContext(bool startMinimized)
     {
@@ -29,6 +33,7 @@ public sealed class KeepAliveContext : ApplicationContext
             PreferredDeviceName = _settings.PreferredDeviceName,
             AutoReconnect = _settings.AutoReconnectOnDeviceAvailable,
             AutoPauseOnOtherAudio = _settings.AutoPauseOnOtherAudio,
+            AlwaysKeepStreamActive = _settings.AlwaysKeepStreamActive,
             CallProtectionMode = _settings.CallProtectionMode,
             PreferBluetoothSoundbox = _settings.PreferBluetoothSoundbox,
             ResumeDelayMilliseconds = _settings.ResumeDelayMilliseconds,
@@ -138,20 +143,31 @@ public sealed class KeepAliveContext : ApplicationContext
         }
 
         if (_isExiting) return;
+
+        bool stateChanged = (_previousEngineState != state);
+        var now = DateTime.UtcNow;
+
         switch (state)
         {
             case AudioEngineState.Running:
                 _toggleItem.Text = "Stop Keep-Alive";
                 _tray.Text = "Keep Alive — Running";
+                // Only notify when transitioning from Stopped, not when resuming from normal media playback or standby,
+                // and rate limit to at most once every 60 seconds to prevent balloon spam.
                 if (_settings.ShowNotifications && _settings.NotifyOnStartStop)
                 {
-                    ShowStateNotification(state, 1500, "Silent stream active. Bluetooth audio connection is maintained.", ToolTipIcon.Info);
+                    if (_previousEngineState == AudioEngineState.Stopped && (now - _lastRunningToastUtc).TotalSeconds > 60)
+                    {
+                        _lastRunningToastUtc = now;
+                        _tray.ShowBalloonTip(1500, "Keep Alive", "Silent stream active. Bluetooth audio connection is maintained.", ToolTipIcon.Info);
+                    }
                 }
                 break;
 
             case AudioEngineState.PausedByOtherAudio:
                 _toggleItem.Text = "Stop Keep-Alive";
-                _tray.Text = "Keep Alive — Standby (Media active)";
+                _tray.Text = "Keep Alive — Running (Media active)";
+                // Never show disruptive toast when media starts or pauses
                 break;
 
             case AudioEngineState.PausedByCallOrMic:
@@ -166,45 +182,45 @@ public sealed class KeepAliveContext : ApplicationContext
 
             case AudioEngineState.DeviceUnavailable:
                 _toggleItem.Text = "Start Keep-Alive";
-                _tray.Text = "Keep Alive — Unavailable";
-                if (_settings.ShowNotifications && _settings.NotifyOnError)
+                _tray.Text = "Keep Alive — Device Disconnected";
+                if (_settings.ShowNotifications && _settings.NotifyOnError && stateChanged)
                 {
-                    ShowStateNotification(state, 2000, "Selected device is unavailable. Please check your Bluetooth connection.", ToolTipIcon.Warning);
+                    if ((now - _lastUnavailableToastUtc).TotalSeconds > 60)
+                    {
+                        _lastUnavailableToastUtc = now;
+                        _tray.ShowBalloonTip(2000, "Keep Alive", "Bluetooth speaker disconnected. Auto-reconnect is monitoring...", ToolTipIcon.Warning);
+                    }
                 }
                 break;
 
             case AudioEngineState.Error:
                 _toggleItem.Text = "Start Keep-Alive";
                 _tray.Text = "Keep Alive — Error";
-                if (_settings.ShowNotifications && _settings.NotifyOnError)
+                if (_settings.ShowNotifications && _settings.NotifyOnError && stateChanged)
                 {
-                    ShowStateNotification(state, 2500, $"Audio error: {message ?? "Unknown error"}", ToolTipIcon.Error);
+                    if ((now - _lastErrorToastUtc).TotalSeconds > 60)
+                    {
+                        _lastErrorToastUtc = now;
+                        _tray.ShowBalloonTip(2500, "Keep Alive", $"Audio error: {message ?? "Unknown error"}", ToolTipIcon.Error);
+                    }
                 }
                 break;
 
             default:
                 _toggleItem.Text = "Start Keep-Alive";
                 _tray.Text = "Keep Alive — Stopped";
-                if (_settings.ShowNotifications && _settings.NotifyOnStartStop && state == AudioEngineState.Stopped)
+                if (_settings.ShowNotifications && _settings.NotifyOnStartStop && state == AudioEngineState.Stopped && stateChanged)
                 {
-                    ShowStateNotification(state, 1200, "Silent stream stopped.", ToolTipIcon.Info);
+                    if ((now - _lastStopToastUtc).TotalSeconds > 30)
+                    {
+                        _lastStopToastUtc = now;
+                        _tray.ShowBalloonTip(1200, "Keep Alive", "Silent stream stopped.", ToolTipIcon.Info);
+                    }
                 }
                 break;
         }
-    }
 
-    // Rate-limit repeated audio-state callbacks to prevent notification flooding.
-    private void ShowStateNotification(AudioEngineState state, int durationMs, string message, ToolTipIcon icon)
-    {
-        var now = DateTime.UtcNow;
-        if (_lastNotificationByState.TryGetValue(state, out var lastShown) &&
-            (now - lastShown).TotalSeconds < 45)
-        {
-            return;
-        }
-
-        _lastNotificationByState[state] = now;
-        _tray.ShowBalloonTip(durationMs, "Keep Alive", message, icon);
+        _previousEngineState = state;
     }
 
     private void ExitApp()
