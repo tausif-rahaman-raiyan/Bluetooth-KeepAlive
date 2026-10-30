@@ -1,5 +1,5 @@
 #define MyAppName "Keep Alive"
-#define MyAppVersion "1.0.4"
+#define MyAppVersion "1.0.5"
 #define MyPublisher "Raiyan"
 #define MyExeName "Keep Alive.exe"
 
@@ -11,7 +11,7 @@ AppPublisher={#MyPublisher}
 DefaultDirName={autopf}\Keep Alive
 DefaultGroupName={#MyAppName}
 OutputDir=installer-output
-OutputBaseFilename=Keep-Alive-Setup-1.0.4
+OutputBaseFilename=Keep-Alive-Setup-1.0.5
 SetupIconFile=assets\hoco-keepalive.ico
 ArchitecturesInstallIn64BitMode=x64
 Compression=lzma2/ultra
