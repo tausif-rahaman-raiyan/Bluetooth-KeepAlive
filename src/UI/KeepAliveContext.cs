@@ -2,6 +2,7 @@ using System.Reflection;
 using HocoKeepAlive.Audio;
 using HocoKeepAlive.Configuration;
 using HocoKeepAlive.Diagnostics;
+using HocoKeepAlive.Services;
 
 namespace HocoKeepAlive.UI;
 
@@ -123,7 +124,7 @@ public sealed class KeepAliveContext : ApplicationContext
                 LogService.Log(LogSeverity.Info, "BluetoothWatcher", $"Connected: {name}");
                 if (_settings.AutoStartOnConnect && IsInActiveScheduleWindow())
                 {
-                    if (_audioService.CurrentState == AudioEngineState.Stopped || _audioService.CurrentState == AudioEngineState.DeviceUnavailable)
+                    if (_audioService.State == AudioEngineState.Stopped || _audioService.State == AudioEngineState.DeviceUnavailable)
                     {
                         _audioService.Start();
                         NotificationService.ShowNotification("Speaker Connected", $"Auto-started KeepAlive stream for {name}", ToolTipIcon.Info);
