@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
-using System.Management;
 using HocoKeepAlive.Audio;
 using HocoKeepAlive.Configuration;
 using HocoKeepAlive.Diagnostics;
