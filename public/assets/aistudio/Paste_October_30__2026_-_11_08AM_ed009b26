@@ -1,0 +1,1609 @@
+12s
+Run if (Test-Path "tests/HocoKeepAlive.Tests/HocoKeepAlive.Tests.csproj") {
+  HocoKeepAlive -> D:\a\Bluetooth-KeepAlive\Bluetooth-KeepAlive\bin\Release\net8.0-windows\Keep Alive.dll
+  HocoKeepAlive.Tests -> D:\a\Bluetooth-KeepAlive\Bluetooth-KeepAlive\tests\HocoKeepAlive.Tests\bin\Release\net8.0-windows\HocoKeepAlive.Tests.dll
+Test run for D:\a\Bluetooth-KeepAlive\Bluetooth-KeepAlive\tests\HocoKeepAlive.Tests\bin\Release\net8.0-windows\HocoKeepAlive.Tests.dll (.NETCoreApp,Version=v8.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 8.0.33)
+[xUnit.net 00:00:00.07]   Discovering: HocoKeepAlive.Tests
+[xUnit.net 00:00:00.10]   Discovered:  HocoKeepAlive.Tests
+[xUnit.net 00:00:00.10]   Starting:    HocoKeepAlive.Tests
+[xUnit.net 00:00:00.19]     HocoKeepAlive.Tests.SilentWaveProviderTests.Read_FillsBufferWithDigitalZeros [FAIL]
+[xUnit.net 00:00:00.19]       Assert.All() Failure: 192 out of 1024 items in the collection did not pass.
+[xUnit.net 00:00:00.19]       [0]:    Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [8]:    Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [9]:    Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [16]:   Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [24]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [25]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [32]:   Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [40]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [41]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [48]:   Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [56]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [57]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [64]:   Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [72]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [73]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [80]:   Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [88]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [89]:   Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [96]:   Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [104]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [105]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [112]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [120]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [121]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [128]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [136]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [137]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [144]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [152]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [153]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [160]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [168]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [169]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [176]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [184]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [185]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [192]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [200]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [201]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [208]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [216]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [217]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [224]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [232]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [233]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [240]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [248]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [249]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [256]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [264]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [265]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [272]:  Item:  1
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   1
+[xUnit.net 00:00:00.19]       [280]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [281]:  Item:  255
+[xUnit.net 00:00:00.19]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.19]                      Expected: 0
+[xUnit.net 00:00:00.19]                      Actual:   255
+[xUnit.net 00:00:00.19]       [288]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [296]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [297]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [304]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [312]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [313]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [320]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [328]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [329]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [336]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [344]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [345]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [352]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [360]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [361]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [368]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [376]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [377]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [384]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [392]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [393]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [400]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [408]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [409]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [416]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [424]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [425]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [432]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [440]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [441]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [448]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [456]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [457]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [464]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [472]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [473]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [480]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [488]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [489]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [496]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [504]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [505]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [512]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [520]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [521]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [528]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [536]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [537]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [544]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [552]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [553]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [560]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [568]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [569]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [576]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [584]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [585]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [592]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [600]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [601]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [608]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [616]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [617]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [624]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [632]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [633]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [640]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [648]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [649]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [656]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [664]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [665]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [672]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [680]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [681]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [688]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [696]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [697]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [704]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [712]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [713]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [720]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [728]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [729]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [736]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [744]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [745]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [752]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [760]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [761]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [768]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [776]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [777]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [784]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [792]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [793]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [800]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [808]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [809]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [816]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [824]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [825]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [832]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [840]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [841]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [848]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [856]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [857]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [864]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [872]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.21]     HocoKeepAlive.Tests.SilentWaveProviderTests.Read_RespectsOffsetAndCount [FAIL]
+[xUnit.net 00:00:00.22]     HocoKeepAlive.Tests.AppSettingsTests.DefaultSettings_HaveSafeDefaults [FAIL]
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [873]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [880]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [888]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [889]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [896]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [904]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [905]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [912]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [920]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [921]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [928]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [936]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [937]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [944]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [952]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [953]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [960]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [968]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [969]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [976]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [984]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [985]:  Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [992]:  Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [1000]: Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [1001]: Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [1008]: Item:  1
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   1
+[xUnit.net 00:00:00.20]       [1016]: Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       [1017]: Item:  255
+[xUnit.net 00:00:00.20]               Error: Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.20]                      Expected: 0
+[xUnit.net 00:00:00.20]                      Actual:   255
+[xUnit.net 00:00:00.20]       Stack Trace:
+[xUnit.net 00:00:00.21]         D:\a\Bluetooth-KeepAlive\Bluetooth-KeepAlive\tests\HocoKeepAlive.Tests\SilentWaveProviderTests.cs(33,0): at HocoKeepAlive.Tests.SilentWaveProviderTests.Read_FillsBufferWithDigitalZeros()
+[xUnit.net 00:00:00.21]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:00.21]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.21]       Assert.Equal() Failure: Values differ
+[xUnit.net 00:00:00.21]       Expected: 0
+[xUnit.net 00:00:00.21]       Actual:   1
+[xUnit.net 00:00:00.21]       Stack Trace:
+[xUnit.net 00:00:00.21]         D:\a\Bluetooth-KeepAlive\Bluetooth-KeepAlive\tests\HocoKeepAlive.Tests\SilentWaveProviderTests.cs(59,0): at HocoKeepAlive.Tests.SilentWaveProviderTests.Read_RespectsOffsetAndCount()
+[xUnit.net 00:00:00.21]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:00.21]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.22]       Assert.True() Failure
+[xUnit.net 00:00:00.22]       Expected: True
+[xUnit.net 00:00:00.22]       Actual:   False
+[xUnit.net 00:00:00.22]       Stack Trace:
+[xUnit.net 00:00:00.22]         D:\a\Bluetooth-KeepAlive\Bluetooth-KeepAlive\tests\HocoKeepAlive.Tests\AppSettingsTests.cs(21,0): at HocoKeepAlive.Tests.AppSettingsTests.DefaultSettings_HaveSafeDefaults()
+[xUnit.net 00:00:00.22]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:00.22]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Test Run Failed.
+  Passed HocoKeepAlive.Tests.AudioStateTests.Service_DisposeTransitionsToExiting [13 ms]
+  Passed HocoKeepAlive.Tests.AudioStateTests.Service_InitialStateIsStopped [< 1 ms]
+  Failed HocoKeepAlive.Tests.SilentWaveProviderTests.Read_FillsBufferWithDigitalZeros [25 ms]
+  Error Message:
+   Assert.All() Failure: 192 out of 1024 items in the collection did not pass.
+[0]:    Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[8]:    Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[9]:    Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[16]:   Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[24]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[25]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[32]:   Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[40]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[41]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[48]:   Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[56]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[57]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[64]:   Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[72]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[73]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[80]:   Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[88]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[89]:   Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[96]:   Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[104]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[105]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[112]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[120]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[121]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[128]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[136]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[137]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[144]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[152]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[153]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[160]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[168]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[169]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[176]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[184]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[185]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[192]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[200]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[201]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[208]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[216]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[217]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[224]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[232]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[233]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[240]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[248]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[249]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[256]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[264]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[265]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[272]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[280]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[281]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[288]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[296]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[297]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[304]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[312]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[313]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[320]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[328]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[329]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[336]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[344]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[345]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[352]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[360]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[361]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[368]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[376]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[377]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[384]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[392]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[393]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[400]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[408]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[409]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[416]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[424]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[425]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[432]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[440]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[441]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[448]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[456]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[457]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[464]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[472]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[473]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[480]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[488]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[489]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[496]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[504]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[505]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[512]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[520]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[521]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[528]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[536]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[537]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[544]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[552]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[553]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[560]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[568]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[569]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[576]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[584]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[585]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[592]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[600]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[601]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[608]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[616]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[617]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[624]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[632]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[633]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[640]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[648]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[649]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[656]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[664]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[665]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[672]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[680]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[681]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[688]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[696]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[697]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[704]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[712]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[713]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[720]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[728]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[729]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[736]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[744]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[745]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[752]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[760]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[761]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[768]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[776]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[777]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[784]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[792]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[793]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[800]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[808]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[809]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[816]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[824]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[825]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[832]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[840]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[841]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[848]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[856]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[857]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[864]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[872]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[873]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[880]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[888]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[889]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[896]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[904]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[905]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[912]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[920]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[921]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[928]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[936]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[937]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[944]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[952]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[953]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[960]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[968]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[969]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[976]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[984]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[985]:  Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[992]:  Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[1000]: Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[1001]: Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[1008]: Item:  1
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   1
+[1016]: Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+[1017]: Item:  255
+        Error: Assert.Equal() Failure: Values differ
+               Expected: 0
+               Actual:   255
+  Stack Trace:
+     at HocoKeepAlive.Tests.SilentWaveProviderTests.Read_FillsBufferWithDigitalZeros() in D:\a\Bluetooth-KeepAlive\Bluetooth-KeepAlive\tests\HocoKeepAlive.Tests\SilentWaveProviderTests.cs:line 33
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Passed HocoKeepAlive.Tests.SilentWaveProviderTests.WaveFormat_MatchesExpectedSpecs [< 1 ms]
+  Passed HocoKeepAlive.Tests.SilentWaveProviderTests.Read_ThrowsOnInvalidParameters [1 ms]
+  Failed HocoKeepAlive.Tests.SilentWaveProviderTests.Read_RespectsOffsetAndCount [15 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 0
+Actual:   1
+  Stack Trace:
+     at HocoKeepAlive.Tests.SilentWaveProviderTests.Read_RespectsOffsetAndCount() in D:\a\Bluetooth-KeepAlive\Bluetooth-KeepAlive\tests\HocoKeepAlive.Tests\SilentWaveProviderTests.cs:line 59
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Passed HocoKeepAlive.Tests.AppSettingsTests.Serialization_RoundTripPreservesAllFields [64 ms]
+  Failed HocoKeepAlive.Tests.AppSettingsTests.DefaultSettings_HaveSafeDefaults [< 1 ms]
+  Error Message:
+   Assert.True() Failure
+Expected: True
+Actual:   False
+  Stack Trace:
+     at HocoKeepAlive.Tests.AppSettingsTests.DefaultSettings_HaveSafeDefaults() in D:\a\Bluetooth-KeepAlive\Bluetooth-KeepAlive\tests\HocoKeepAlive.Tests\AppSettingsTests.cs:line 21
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Passed HocoKeepAlive.Tests.AudioStateTests.Service_SetTargetDeviceUpdatesProperty [45 ms]
+[xUnit.net 00:00:00.26]   Finished:    HocoKeepAlive.Tests
+  Passed HocoKeepAlive.Tests.AudioStateTests.Service_RepeatedStopCallsAreSafe [< 1 ms]
+  Passed HocoKeepAlive.Tests.AppSettingsTests.CorruptedJson_FallsBackToDefaults [1 ms]
+
+Total tests: 11
+     Passed: 8
+     Failed: 3
+ Total time: 0.9118 Seconds
+Error: Process completed with exit code 1.

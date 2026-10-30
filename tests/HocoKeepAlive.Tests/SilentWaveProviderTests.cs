@@ -18,7 +18,7 @@ public class SilentWaveProviderTests
     [Fact]
     public void Read_FillsBufferWithDigitalZeros()
     {
-        var provider = new SilentWaveProvider();
+        var provider = new SilentWaveProvider(useAntiSleepDither: false);
         byte[] buffer = new byte[1024];
 
         // Seed with non-zero bytes to ensure provider clears them
@@ -36,7 +36,7 @@ public class SilentWaveProviderTests
     [Fact]
     public void Read_RespectsOffsetAndCount()
     {
-        var provider = new SilentWaveProvider();
+        var provider = new SilentWaveProvider(useAntiSleepDither: false);
         byte[] buffer = new byte[100];
         Array.Fill(buffer, (byte)0xFF);
 
@@ -64,6 +64,19 @@ public class SilentWaveProviderTests
         {
             Assert.Equal((byte)0xFF, buffer[i]);
         }
+    }
+
+    [Fact]
+    public void Read_AppliesSubAudibleDitherWhenEnabled()
+    {
+        var provider = new SilentWaveProvider(useAntiSleepDither: true);
+        byte[] buffer = new byte[1024];
+
+        int bytesRead = provider.Read(buffer, 0, buffer.Length);
+
+        Assert.Equal(buffer.Length, bytesRead);
+        // Ensure dither injected non-zero LSB signals
+        Assert.Contains(buffer, b => b != 0);
     }
 
     [Fact]

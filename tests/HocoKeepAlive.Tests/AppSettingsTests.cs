@@ -18,7 +18,7 @@ public class AppSettingsTests
         Assert.True(settings.MinimizeToTrayOnClose);
         Assert.True(settings.ShowNotifications);
         Assert.True(settings.AutoReconnectOnDeviceAvailable);
-        Assert.True(settings.AutoPauseOnOtherAudio);
+        Assert.False(settings.AutoPauseOnOtherAudio);
         Assert.True(settings.CallProtectionMode);
         Assert.True(settings.PreferBluetoothSoundbox);
         Assert.Equal(1200, settings.ResumeDelayMilliseconds);
